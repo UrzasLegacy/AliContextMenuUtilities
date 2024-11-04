@@ -1,0 +1,384 @@
+2024-08-07 22:50:09,058 - CkptModelPage - INFO - it worked
+2024-08-07 22:50:09,058 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Lora\PONY\_LoraStaging\Pony_XL_Oblivious_Woman_In_Glasses_Playing_Video_Games_Concept.safetensors:sha256: 34d5616b5f134f6a55230e349bb4fd2384be042f8e8869829ea1c91555a510bd
+2024-08-07 22:50:09,058 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-07 22:50:09,277 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/34d5616b5f134f6a55230e349bb4fd2384be042f8e8869829ea1c91555a510bd HTTP/1.1" 200 None
+2024-08-07 22:54:39,239 - CkptModelPage - INFO - it worked
+2024-08-07 22:54:39,239 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Lora\PONY\_LoraStaging\Pony_XL_KrakenKatz_3_Style.safetensors:sha256: ca02bffab4b79632961fc59111b954eaedffa1dc597223077ae64e1c0442e2da
+2024-08-07 22:54:39,254 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-07 22:54:39,676 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ca02bffab4b79632961fc59111b954eaedffa1dc597223077ae64e1c0442e2da HTTP/1.1" 200 None
+2024-08-07 22:58:50,181 - CkptModelPage - INFO - it worked
+2024-08-07 22:58:50,181 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Lora\PONY\_LoraStaging\Pony_XL_KrakenKatz_3_Style.safetensors:sha256: ca02bffab4b79632961fc59111b954eaedffa1dc597223077ae64e1c0442e2da
+2024-08-07 22:58:50,181 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-07 22:58:50,306 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ca02bffab4b79632961fc59111b954eaedffa1dc597223077ae64e1c0442e2da HTTP/1.1" 200 None
+2024-08-07 23:38:48,668 - CkptModelPage - INFO - it worked
+2024-08-07 23:38:48,684 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Lora\PONY\_LoraStaging\Pony_XL_Inanimate_Sleeping_Passed_Out_Concept.safetensors:sha256: a5c18b7148b2e3a7e5c6993ebf127c929210441cbd8ffd33f7456ae29e967b8f
+2024-08-07 23:38:48,684 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-07 23:38:48,918 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/a5c18b7148b2e3a7e5c6993ebf127c929210441cbd8ffd33f7456ae29e967b8f HTTP/1.1" 200 None
+2024-08-08 12:47:55,980 - CkptModelPage - INFO - it worked
+2024-08-08 12:48:03,813 - AliUtils - INFO - Hash computed and set to ADS sha256: c950b42c7bbf2ddea3d3ff5a0a4962d40ef4db45c1000642525d7c53a13294da
+2024-08-08 12:48:03,813 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-08 12:48:04,101 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/c950b42c7bbf2ddea3d3ff5a0a4962d40ef4db45c1000642525d7c53a13294da HTTP/1.1" 200 None
+2024-08-08 15:27:53,812 - CkptModelPage - INFO - it worked
+2024-08-08 15:28:07,016 - AliUtils - INFO - Hash computed and set to ADS sha256: ec6546c95ce14feb8f674e8ec0a63536923adc6590c4abdff73321e065ad498a
+2024-08-08 15:28:07,031 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-08 15:28:07,250 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ec6546c95ce14feb8f674e8ec0a63536923adc6590c4abdff73321e065ad498a HTTP/1.1" 200 None
+2024-08-08 15:32:56,525 - CkptModelPage - INFO - it worked
+2024-08-08 15:32:56,533 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Stable-diffusion\_IN\Pony_XLX_DarkMix_v1_Ckpt.safetensors:sha256: b64127d21216fe85f1bdf9f9203d798b040e9f826ebd26b6eaeb6dcbdf5bd66f
+2024-08-08 15:32:56,535 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-08 15:32:56,738 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/b64127d21216fe85f1bdf9f9203d798b040e9f826ebd26b6eaeb6dcbdf5bd66f HTTP/1.1" 200 None
+2024-08-08 15:33:19,356 - CkptModelPage - INFO - it worked
+2024-08-08 15:33:19,356 - AliUtils - INFO - Hash retrieved from ADS S:\A1111\models\Stable-diffusion\_IN\Pony_XLX_DarkMix_v1_Ckpt.safetensors:sha256: b64127d21216fe85f1bdf9f9203d798b040e9f826ebd26b6eaeb6dcbdf5bd66f
+2024-08-08 15:33:19,358 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-08 15:33:19,476 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/b64127d21216fe85f1bdf9f9203d798b040e9f826ebd26b6eaeb6dcbdf5bd66f HTTP/1.1" 200 None
+2024-08-08 16:34:32,744 - CkptModelPage - INFO - it worked
+2024-08-08 16:34:38,401 - AliUtils - INFO - Hash computed and set to ADS sha256: 39feba5009a24765d396b9601f388b5ce7b7c0ae811bcd7c301e890e1210eee8
+2024-08-08 16:34:38,416 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-08 16:34:38,651 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/39feba5009a24765d396b9601f388b5ce7b7c0ae811bcd7c301e890e1210eee8 HTTP/1.1" 200 None
+2024-08-09 23:43:17,724 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:18,045 - AliUtils - INFO - Hash computed and set to ADS sha256: 1478241c708a0c8038f62b2de25b96766594e88a27055609af28c467833c5fd2
+2024-08-09 23:43:18,047 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:18,460 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/1478241c708a0c8038f62b2de25b96766594e88a27055609af28c467833c5fd2 HTTP/1.1" 200 None
+2024-08-09 23:43:26,342 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:26,549 - AliUtils - INFO - Hash computed and set to ADS sha256: c65af747a5918eaf2625732ba111b335e924b35e64c55df944496c40d15e6c89
+2024-08-09 23:43:26,551 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:26,924 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/c65af747a5918eaf2625732ba111b335e924b35e64c55df944496c40d15e6c89 HTTP/1.1" 200 None
+2024-08-09 23:43:33,939 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:34,231 - AliUtils - INFO - Hash computed and set to ADS sha256: f92e31cf8f9c1a2f023d2a39baebe595a7a34e6545b5731022a9f2a2129b9e8d
+2024-08-09 23:43:34,233 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:34,757 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/f92e31cf8f9c1a2f023d2a39baebe595a7a34e6545b5731022a9f2a2129b9e8d HTTP/1.1" 200 None
+2024-08-09 23:43:40,329 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:40,628 - AliUtils - INFO - Hash computed and set to ADS sha256: b6d5bc6503ef231d34340fbeea3f8aff32d58eddaaaf801f3424a6804e00474d
+2024-08-09 23:43:40,630 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:41,024 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/b6d5bc6503ef231d34340fbeea3f8aff32d58eddaaaf801f3424a6804e00474d HTTP/1.1" 200 None
+2024-08-09 23:43:46,213 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:46,578 - AliUtils - INFO - Hash computed and set to ADS sha256: d6057f47b36afca099688f08a1bfd4c522ddc2c2a2152fb10388368dda65aff4
+2024-08-09 23:43:46,580 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:46,785 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/d6057f47b36afca099688f08a1bfd4c522ddc2c2a2152fb10388368dda65aff4 HTTP/1.1" 200 None
+2024-08-09 23:43:54,789 - CkptModelPage - INFO - it worked
+2024-08-09 23:43:55,049 - AliUtils - INFO - Hash computed and set to ADS sha256: e1bd1687d269d4c46ad5026c0e9da757277106e72dd3abaa84f3fd53ee892948
+2024-08-09 23:43:55,051 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:43:55,598 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/e1bd1687d269d4c46ad5026c0e9da757277106e72dd3abaa84f3fd53ee892948 HTTP/1.1" 200 None
+2024-08-09 23:44:00,994 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:01,067 - AliUtils - INFO - Hash computed and set to ADS sha256: 68513d4f750da9287323fc24635c65f048caa75598eb3009b2f8ed15f2673199
+2024-08-09 23:44:01,069 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:01,750 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/68513d4f750da9287323fc24635c65f048caa75598eb3009b2f8ed15f2673199 HTTP/1.1" 200 None
+2024-08-09 23:44:07,700 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,702 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,745 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,772 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,775 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,782 - AliUtils - INFO - Hash computed and set to ADS sha256: d690daafb7b4d29b83fc7456d0db2915af9141f88093e5eb381d24da056bba16
+2024-08-09 23:44:07,785 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:07,809 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,837 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,849 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,856 - AliUtils - INFO - Hash computed and set to ADS sha256: 6c5055bed0ab80ea425231e65d4ed9aa9ab70bf0cadd682b91f21893e176a980
+2024-08-09 23:44:07,858 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:07,866 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:07,893 - AliUtils - INFO - Hash computed and set to ADS sha256: 114cb1e33728961589cd29b9aae88f09574913d8700fa2192a72cc3f7ba57a7f
+2024-08-09 23:44:07,895 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:07,938 - AliUtils - INFO - Hash computed and set to ADS sha256: 3c6a694aac2fe75b1a595358ac737413f79ec86bd27fd94590a84fff7f01bacb
+2024-08-09 23:44:07,940 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:07,941 - AliUtils - INFO - Hash computed and set to ADS sha256: 1f354655121330f358420a4355a22373828958eda786a7534c8910becc27aa63
+2024-08-09 23:44:07,943 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:08,012 - AliUtils - INFO - Hash computed and set to ADS sha256: 7c941d5dc1aa42b3cca62b398bb30e26bb8aa170e88deaba36bce35766661d9f
+2024-08-09 23:44:08,014 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:08,081 - AliUtils - INFO - Hash computed and set to ADS sha256: 84b8f2bc2bda6849e02da26c1cb8ae22e8d59edf71ea7e0c95afc4f567ca866e
+2024-08-09 23:44:08,083 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:08,089 - AliUtils - INFO - Hash computed and set to ADS sha256: 1172b49cdcdc9ce17c36cbfa44edba5c3bd5ef92c3e30778e1c4d874a639937a
+2024-08-09 23:44:08,091 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:08,141 - AliUtils - INFO - Hash computed and set to ADS sha256: 510ee2369e378f1925f11eb457b55c1a9682118e3f97976f0995c83f96a35241
+2024-08-09 23:44:08,143 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:08,200 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/7c941d5dc1aa42b3cca62b398bb30e26bb8aa170e88deaba36bce35766661d9f HTTP/1.1" 200 None
+2024-08-09 23:44:08,206 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/1f354655121330f358420a4355a22373828958eda786a7534c8910becc27aa63 HTTP/1.1" 200 None
+2024-08-09 23:44:08,209 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/d690daafb7b4d29b83fc7456d0db2915af9141f88093e5eb381d24da056bba16 HTTP/1.1" 200 None
+2024-08-09 23:44:08,406 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/3c6a694aac2fe75b1a595358ac737413f79ec86bd27fd94590a84fff7f01bacb HTTP/1.1" 200 None
+2024-08-09 23:44:08,407 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/1172b49cdcdc9ce17c36cbfa44edba5c3bd5ef92c3e30778e1c4d874a639937a HTTP/1.1" 200 None
+2024-08-09 23:44:08,409 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/510ee2369e378f1925f11eb457b55c1a9682118e3f97976f0995c83f96a35241 HTTP/1.1" 200 None
+2024-08-09 23:44:08,409 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/6c5055bed0ab80ea425231e65d4ed9aa9ab70bf0cadd682b91f21893e176a980 HTTP/1.1" 200 None
+2024-08-09 23:44:08,415 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/114cb1e33728961589cd29b9aae88f09574913d8700fa2192a72cc3f7ba57a7f HTTP/1.1" 200 None
+2024-08-09 23:44:08,576 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/84b8f2bc2bda6849e02da26c1cb8ae22e8d59edf71ea7e0c95afc4f567ca866e HTTP/1.1" 200 None
+2024-08-09 23:44:30,946 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:30,946 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:30,947 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\Pregnancy test_pony_V1.0.safetensors:sha256: a430fac1242e50530ab7f4be47319f7e15d16846ef0ed881d08e47faf354f0a3
+2024-08-09 23:44:30,949 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:30,979 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,006 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,021 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,021 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\thiccwithaqXLP.safetensors:sha256: b1f6f737320104aaabe6cc539848b3f6a60feec8065515a3b02427f6307e6b95
+2024-08-09 23:44:31,022 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,022 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\f3t4lXLP.safetensors:sha256: 9c9098237a60f0a57a938d153d167aeb6807c8cd7b5423e47e87500ef996c21e
+2024-08-09 23:44:31,023 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,025 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,034 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,034 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\Drims_Comic_Book_Lora_V2.safetensors:sha256: e75cdc15461a8dfbaf17f68a7f308b3b254592c3e4fb9d9d1659eab57ba2d08a
+2024-08-09 23:44:31,037 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,055 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,068 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,084 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,113 - CkptModelPage - INFO - it worked
+2024-08-09 23:44:31,154 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/a430fac1242e50530ab7f4be47319f7e15d16846ef0ed881d08e47faf354f0a3 HTTP/1.1" 200 None
+2024-08-09 23:44:31,193 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/b1f6f737320104aaabe6cc539848b3f6a60feec8065515a3b02427f6307e6b95 HTTP/1.1" 200 None
+2024-08-09 23:44:31,228 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/e75cdc15461a8dfbaf17f68a7f308b3b254592c3e4fb9d9d1659eab57ba2d08a HTTP/1.1" 200 None
+2024-08-09 23:44:31,234 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/9c9098237a60f0a57a938d153d167aeb6807c8cd7b5423e47e87500ef996c21e HTTP/1.1" 200 None
+2024-08-09 23:44:31,551 - AliUtils - INFO - Hash computed and set to ADS sha256: 17c2462bcaf8cbc5d5a3a2b2f19ea9ecb813e5d98a933458b1e764755e9b8d10
+2024-08-09 23:44:31,553 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,761 - AliUtils - INFO - Hash computed and set to ADS sha256: bcc20c3da0c7b38a397456fa8db77e9bfb36543847bdee4e5d11c3580c76c9e2
+2024-08-09 23:44:31,762 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/17c2462bcaf8cbc5d5a3a2b2f19ea9ecb813e5d98a933458b1e764755e9b8d10 HTTP/1.1" 200 None
+2024-08-09 23:44:31,763 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,809 - AliUtils - INFO - Hash computed and set to ADS sha256: 6f4f662fed933cff444c973e6d29852cdf2144f7637145c46d15c925b3d4e27b
+2024-08-09 23:44:31,811 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,823 - AliUtils - INFO - Hash computed and set to ADS sha256: 81d2867c429ec20ea14351eff8f09abaae4689f760d32387efc1654c8899a9f7
+2024-08-09 23:44:31,824 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:31,964 - AliUtils - INFO - Hash computed and set to ADS sha256: 77d0ad607100ec5c34c3be15144c08c3015a22227fe3eba657f0802f410bed63
+2024-08-09 23:44:31,965 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:32,022 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/6f4f662fed933cff444c973e6d29852cdf2144f7637145c46d15c925b3d4e27b HTTP/1.1" 200 None
+2024-08-09 23:44:32,163 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/bcc20c3da0c7b38a397456fa8db77e9bfb36543847bdee4e5d11c3580c76c9e2 HTTP/1.1" 200 None
+2024-08-09 23:44:32,187 - AliUtils - INFO - Hash computed and set to ADS sha256: cd15d56d52f876eb5154d71126a71931cd820b9c1d3e7ceaad31690a922d9ea8
+2024-08-09 23:44:32,190 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:32,192 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/77d0ad607100ec5c34c3be15144c08c3015a22227fe3eba657f0802f410bed63 HTTP/1.1" 200 None
+2024-08-09 23:44:32,236 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/81d2867c429ec20ea14351eff8f09abaae4689f760d32387efc1654c8899a9f7 HTTP/1.1" 200 None
+2024-08-09 23:44:32,383 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/cd15d56d52f876eb5154d71126a71931cd820b9c1d3e7ceaad31690a922d9ea8 HTTP/1.1" 200 None
+2024-08-09 23:44:40,928 - AliUtils - INFO - Hash computed and set to ADS sha256: 3891f5e88d4429da9139817c8a461f9a883cbf92e035bf597632c4dd1fef1784
+2024-08-09 23:44:40,929 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:44:41,375 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/3891f5e88d4429da9139817c8a461f9a883cbf92e035bf597632c4dd1fef1784 HTTP/1.1" 200 None
+2024-08-09 23:45:10,267 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,268 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\gatsPonyxlStyleDora_v10.safetensors:sha256: 83675aeb131f8b361bf632653bc6a13da8948e8571dce1a23e8d64b950900f7d
+2024-08-09 23:45:10,270 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,272 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,273 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\artist-navigavi.safetensors:sha256: 60e4d00d494bcd969f6370cc7616a71b6b49a4b97d3c229d79e09f9dbc1f5427
+2024-08-09 23:45:10,275 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,287 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,287 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\Skunkworks_Anthology_XL_v2.safetensors:sha256: 8c65b7902711daa5f672a6b248ca90dfc44c48c6fabe37104b8b365785c18cec
+2024-08-09 23:45:10,289 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,293 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,293 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\DRKDL-R.safetensors:sha256: 92d01cde90395b9ac90a14522cf158553bf536b4a4a36565a916cfbcec98b8df
+2024-08-09 23:45:10,294 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,303 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,304 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\kasa7aug07v2-step00000143.safetensors:sha256: b84aaca16244131a193c6f95a7a924d881285e78e460ac96e718d76f883a46fe
+2024-08-09 23:45:10,305 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,312 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,313 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\SoftAnimeStyle.safetensors:sha256: f8bb0c6299e204c61eb14c7d8e3e62e63408e4a3500f0427e349a7c1ef0d2ce3
+2024-08-09 23:45:10,314 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,330 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,330 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\NKM.safetensors:sha256: 947f3d2d5ccf6de78d5b623ca289f1f26ef543496eda4596ffda6be217e26b08
+2024-08-09 23:45:10,331 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,344 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,345 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\VirtualGravesStyle.safetensors:sha256: 90c537b361c1f896dd6221facee1befdc6e2aeb604b87fb6a3f4223e2770f775
+2024-08-09 23:45:10,346 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,356 - CkptModelPage - INFO - it worked
+2024-08-09 23:45:10,356 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\megumi.safetensors:sha256: 40080d282cd9cbca29a35adb50307894a23beb47a2d984bf1a89df3c05fc0338
+2024-08-09 23:45:10,358 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-09 23:45:10,358 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/83675aeb131f8b361bf632653bc6a13da8948e8571dce1a23e8d64b950900f7d HTTP/1.1" 200 None
+2024-08-09 23:45:10,359 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/60e4d00d494bcd969f6370cc7616a71b6b49a4b97d3c229d79e09f9dbc1f5427 HTTP/1.1" 200 None
+2024-08-09 23:45:10,379 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/92d01cde90395b9ac90a14522cf158553bf536b4a4a36565a916cfbcec98b8df HTTP/1.1" 200 None
+2024-08-09 23:45:10,383 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/8c65b7902711daa5f672a6b248ca90dfc44c48c6fabe37104b8b365785c18cec HTTP/1.1" 200 None
+2024-08-09 23:45:10,406 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/f8bb0c6299e204c61eb14c7d8e3e62e63408e4a3500f0427e349a7c1ef0d2ce3 HTTP/1.1" 200 None
+2024-08-09 23:45:10,409 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/b84aaca16244131a193c6f95a7a924d881285e78e460ac96e718d76f883a46fe HTTP/1.1" 200 None
+2024-08-09 23:45:10,415 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/947f3d2d5ccf6de78d5b623ca289f1f26ef543496eda4596ffda6be217e26b08 HTTP/1.1" 200 None
+2024-08-09 23:45:10,436 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/90c537b361c1f896dd6221facee1befdc6e2aeb604b87fb6a3f4223e2770f775 HTTP/1.1" 200 None
+2024-08-09 23:45:10,450 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/40080d282cd9cbca29a35adb50307894a23beb47a2d984bf1a89df3c05fc0338 HTTP/1.1" 200 None
+2024-08-10 12:18:38,316 - CkptModelPage - INFO - it worked
+2024-08-10 12:18:38,316 - AliUtils - INFO - Hash retrieved from ADS C:\Users\alist\Downloads\TA megumi style.safetensors:sha256: 40080d282cd9cbca29a35adb50307894a23beb47a2d984bf1a89df3c05fc0338
+2024-08-10 12:18:38,316 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-10 12:18:38,410 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/40080d282cd9cbca29a35adb50307894a23beb47a2d984bf1a89df3c05fc0338 HTTP/1.1" 200 None
+2024-08-25 15:31:05 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 15:31:05 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/35079caababf45e32ae37de016cbeb643b05396f1b8d3e05de57a81402b77eb9 HTTP/1.1" 200 None
+2024-08-25 16:24:58 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:24:58 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/35079caababf45e32ae37de016cbeb643b05396f1b8d3e05de57a81402b77eb9 HTTP/1.1" 200 None
+2024-08-25 16:35:39 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:39 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/8e7cb4b1ad3152ae01b9426a481d09be2221d76048c0075ba6f1075629e8e594 HTTP/1.1" 200 None
+2024-08-25 16:35:43 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:44 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/34d5616b5f134f6a55230e349bb4fd2384be042f8e8869829ea1c91555a510bd HTTP/1.1" 200 None
+2024-08-25 16:35:47 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:47 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/0018092f28e8e2f8c2b751bb83957367462ab72deb687be3a956b638e099f0f3 HTTP/1.1" 200 None
+2024-08-25 16:35:49 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:49 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ef073fea8374e61967576ffe2f2ec44321edf064af6a8ecb080129bdf28ee450 HTTP/1.1" 200 None
+2024-08-25 16:35:52 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:52 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/bf850f281836ff7f8ae00edd4973af99942a503c0695702b2e41bc01b330bb0f HTTP/1.1" 200 None
+2024-08-25 16:35:55 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-25 16:35:55 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ef8542acec6f33a317999ab2ebec255de6cd30ec2e9c48fe230ad8320b7aac25 HTTP/1.1" 200 None
+2024-08-26 01:40:55 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:40:56 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/720beef79b8940e40778852e346c87822a570bfb1a0172a83013f47334707089 HTTP/1.1" 200 None
+2024-08-26 01:42:43 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:42:43 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/57e3bc1c3fc77fca52399920fe09d4d720721ae4001b88ab741c00c9f283b3ce HTTP/1.1" 200 None
+2024-08-26 01:43:05 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:43:05 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/5316c57d1e2e061c2b8583d55f3c8bb44e68a6522dbd49c0c07a60c26afbebe7 HTTP/1.1" 404 27
+2024-08-26 01:43:05 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 54, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/5316c57d1e2e061c2b8583d55f3c8bb44e68a6522dbd49c0c07a60c26afbebe7
+2024-08-26 01:43:46 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:43:46 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/bc9d1f411427c002184a9f7aa9af969f79dc5210f4c59e551a0921603696a39d HTTP/1.1" 200 None
+2024-08-26 01:43:47 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:43:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/01c56346e47617d19f94930f980883010808e6e0db847b64a3ed8823a5197c76 HTTP/1.1" 200 None
+2024-08-26 01:45:49 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 01:45:49 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/01c56346e47617d19f94930f980883010808e6e0db847b64a3ed8823a5197c76 HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/6a2d46f384fa780f845354b3f954c0bee6cd97c2a7f7007662bde64550c6356a HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/4381be70495e457924099095a304dd26cf4d8932acbce538e8c7994c53e16eda HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/072087badedb89d85f0d87e16a904751d260afd44a364392db24f80f01121398 HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/083677d2463b34dbd873052946ef1f03c834611a3a72e20817cb72f5cc8f597f HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/2f0532efea86bb82a3c72788faa9efc28dc56dd34cb144ab7d9ea47aa49c8ccd HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/3dcbd09eb8c1ba02bc276dd7f3dbba949759793fba7aa094d7b057f3d77dcab0 HTTP/1.1" 200 None
+2024-08-26 15:04:48 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/9c24cde46f34ee58c1dcf906dd47e2ebdafa4201ae2afe93d174245805fc64e5 HTTP/1.1" 200 None
+2024-08-26 15:04:49 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/726da12f88818a12ca57ecb67ad62ab4e01b4e7ed4b3e758efbd01be135fdf69 HTTP/1.1" 200 None
+2024-08-26 15:04:55 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:56 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/2dc867f4dbbbc90d4bae8e43ea0e23061ba6fd4d17eef143bc1e053b06032110 HTTP/1.1" 200 None
+2024-08-26 15:04:56 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:56 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/c0f15a7881cc805eff148bf2950bd316816ffec72496f326da5ed1fc31d67c12 HTTP/1.1" 200 None
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/f2412c49e3174c8be45c9e6f3caeb72ad37a2a3420ea55629111853349fc1760 HTTP/1.1" 200 None
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/dd37db7663fd498a6813918eeecd8577a333d01f2f2360edc42c4892dc97495d HTTP/1.1" 200 None
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/e43ad4b5c0b39ca4f31b012692e8264318e3b7b21f965c816fabb48a62eff410 HTTP/1.1" 200 None
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/14c0ba5060f51b2650b376a93908dc90b02a125039f6dfb666b935c7fdf0131e HTTP/1.1" 404 27
+2024-08-26 15:04:57 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 54, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/14c0ba5060f51b2650b376a93908dc90b02a125039f6dfb666b935c7fdf0131e
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/9473c51f3250cc5203e72a38148e4280cde8e97b61c329a4a630e2e760f67b27 HTTP/1.1" 200 None
+2024-08-26 15:04:57 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/16825a40c1e8e1d453534e93519e1c9388ecf44365692145d09b48b3136c09aa HTTP/1.1" 200 None
+2024-08-26 15:05:02 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:03 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/3a9fb4a1ff0e3d918abfd45bdb8665ab0c191d71c13ddfb56bde5bed7e7d1e4e HTTP/1.1" 200 None
+2024-08-26 15:05:03 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:03 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:03 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/9a635005d312029dd2450eccb822c7ca47da5dc30323362aa15dacbc2d4acdd1 HTTP/1.1" 200 None
+2024-08-26 15:05:03 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/f0cab7b3e1fd4142fe371171bc257a887c8a8c8e018110739993366eba58352f HTTP/1.1" 200 None
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/ef7aecec2d8e41e3320b997d259a18d34428f4803f5fdd95ebdc7e333f222578 HTTP/1.1" 200 None
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/65f6ad30c0c3e9390b9be19d0a2a45064493f4de36e4d8ae064be6249cda4958 HTTP/1.1" 404 27
+2024-08-26 15:05:04 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 54, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/65f6ad30c0c3e9390b9be19d0a2a45064493f4de36e4d8ae064be6249cda4958
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/9f8f12af3e7376fde08490ee4c99e176927e9354e03ab17fd6a368b53ede4e5b HTTP/1.1" 200 None
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/bef8724076aafa13eac539c8672941a19a1f5da91a63d5013991129ee3a014fa HTTP/1.1" 200 None
+2024-08-26 15:05:04 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/01fe2aea2bb2c39654e0178f962e278bba8f8705895313e704d93afc8fbbb19e HTTP/1.1" 200 None
+2024-08-26 15:05:05 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/761b0c743be564aafda7b44ffe20e6ff5a0298589cea9f255e31200351f8e797 HTTP/1.1" 200 None
+2024-09-09 02:31:45 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:31:45 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/34c802aef75af34fd0a23f148a373fb2c75a66c9d07eceac486856dd4911e3af HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/81e92b5ac4029c9405a53b4e4c72e0e7ce82edbc5a1a58e3670d21e903910cb9 HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/3c231919be03cb2d5c8073b00fd331099862b1678eacda9d9765cbbf745ac791 HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/34c802aef75af34fd0a23f148a373fb2c75a66c9d07eceac486856dd4911e3af HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/41b7718d6922f0b1fb51cf3581b95f4d293fde696ed66c7388e68f45060891ed HTTP/1.1" 404 27
+2024-09-09 02:35:20 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 126, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/41b7718d6922f0b1fb51cf3581b95f4d293fde696ed66c7388e68f45060891ed
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/aab165bf28ce0240e25584d04b8eab288a73cc08ecf8a8115a75ffba13d4ec2f HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/260862c9f893ae29af16226bc7e0cdbe8e5695fa8092b1b4097de3df68b48801 HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/7580a9f8917493bbac6690859f9f20158fa5720949f3d2f237dbdebee8347aca HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/1fd299609e9cb129281114b56fe82f580915f79151d029fc44b9b9cee860526d HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/fce7f889eab6949fd8bf1fc49e002d4bec8a2381323d14cf2c241e187069e285 HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/4ca4ccd3d52edd763582cecf54b663a2cdd05246cc87fe5025023361a3d8d970 HTTP/1.1" 200 None
+2024-09-09 02:35:20 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/79411bf0667d8dc5c8a72450ed4a3ef882099fd8e49e6a4e9fd96c0a202df3e2 HTTP/1.1" 200 None
+2024-09-09 02:45:33 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:45:33 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/1fd299609e9cb129281114b56fe82f580915f79151d029fc44b9b9cee860526d HTTP/1.1" 200 None
+2024-09-09 02:47:41 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:47:41 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:47:41 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:47:42 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/fce7f889eab6949fd8bf1fc49e002d4bec8a2381323d14cf2c241e187069e285 HTTP/1.1" 200 None
+2024-09-09 02:47:42 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/260862c9f893ae29af16226bc7e0cdbe8e5695fa8092b1b4097de3df68b48801 HTTP/1.1" 200 None
+2024-09-09 02:47:42 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/4ca4ccd3d52edd763582cecf54b663a2cdd05246cc87fe5025023361a3d8d970 HTTP/1.1" 200 None
+2024-09-09 02:52:39 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:52:39 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/79411bf0667d8dc5c8a72450ed4a3ef882099fd8e49e6a4e9fd96c0a202df3e2 HTTP/1.1" 200 None
+2024-09-09 02:53:00 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 02:53:00 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/41b7718d6922f0b1fb51cf3581b95f4d293fde696ed66c7388e68f45060891ed HTTP/1.1" 404 27
+2024-09-09 02:53:00 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 126, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/41b7718d6922f0b1fb51cf3581b95f4d293fde696ed66c7388e68f45060891ed
+2024-09-09 22:11:19 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 22:11:19 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/add05eb321b735f4f5f77e52df7215310f953a6a9fdd54006f12323097820b7e HTTP/1.1" 404 27
+2024-09-09 22:11:19 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 126, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+  File "C:\g\alipngenv\lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/add05eb321b735f4f5f77e52df7215310f953a6a9fdd54006f12323097820b7e
+2024-09-09 22:16:26 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-09 22:16:26 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/13430dc417810649b00594dc25e0d975ea4079ba8f0e623a608429f55030ec7c HTTP/1.1" 200 None
+2024-09-10 17:53:37 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-10 17:53:37 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/f2f38426f893c553eefbd10f13708bb72116fab969188f603a04fa8311df8c59 HTTP/1.1" 200 None
+2024-09-12 00:09:53 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-12 00:09:54 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/5d1de897f79376d1dc6b37200a2d1be30e1abbcfd8d31c74ba086635334ca869 HTTP/1.1" 200 None
+2024-09-15 12:24:52 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-15 12:24:52 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/053043dccf63fde482248e9234b69d2bba3d2827658005024ec86e19c11a94a6 HTTP/1.1" 200 None
+2024-09-23 14:37:14 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:14 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/a442744686600051f4e1b9662035b3e3475f7c50ac538a46316a1922e81512e8 HTTP/11" 200 None
+2024-09-23 14:37:16 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:17 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/80345177cfcd2c830668a647bb386f8ae691b952c39210e85781056f1e1b6e66 HTTP/11" 200 None
+2024-09-23 14:37:18 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:18 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/cd11463e0029309fcd0554e3ebca9aac986a9c8b4ce1dfd179db51a9b393cb68 HTTP/11" 200 None
+2024-09-23 14:37:25 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:25 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/92b471c522ae58b5da307848d4a19f0ea8edbb35035c0f9ba5082b0df4ae57b1 HTTP/11" 200 None
+2024-09-23 14:37:35 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:35 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/834dafe52236cbcbd21f1cdf36c146d1710d612e7ddbb466e5dedc8501120c35 HTTP/11" 200 None
+2024-09-23 14:37:40 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:40 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/7ceef6aeabb2c9704386e98494c5c9dcc248aa15b51cf673ce7d4b66d43943f3 HTTP/11" 404 27
+2024-09-23 14:37:40 - root - ERROR - Exception occurred
+Traceback (most recent call last):
+  File "C:\AliProjects\StableDiffusion\AliComfy\custom_nodes\AliNodes\tools\ContextMenuUtilities\CkptModelPageViewer\CkptModelPage.py", line 126, in context_menu_execute
+    response.raise_for_status()  # Check if the request was successful
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\AliProjects\Python\.venv\Lib\site-packages\requests\models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://civitai.com/api/v1/model-versions/by-hash/7ceef6aeabb2c9704386e98494c5c9dcc248aa15b51cf673ce7d4b66d43943f3
+2024-09-23 14:37:43 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:43 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/4cdbd4bbc1535067072dd58e0b28df9c53136d9cc4842c0a75475bcab749a51e HTTP/11" 200 None
+2024-09-23 14:37:45 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:45 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/0497ce9d0a782530c46c79f813a88821eae2a2ef6aea7f89ef1afb1b27e35c87 HTTP/11" 200 None
+2024-09-23 14:37:47 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:47 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/072f628d7ed90391bc78b54d5504e05a10287cf7eb7ebb79e9cb41b6e0150e7d HTTP/11" 200 None
+2024-09-23 14:37:49 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:49 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/a6c5dedfa099ed0f2fd8db464da470ce8771c32f380e6cf1d4dda57ee9f67cae HTTP/11" 200 None
+2024-09-23 14:37:51 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-09-23 14:37:52 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/129b365b6c798e7f654235e5ac727e0ffdf950476fda43af399be548ed93b0d1 HTTP/11" 200 None
+2024-10-07 16:46:16 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-10-07 16:46:16 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/e211455805a972394baabe368a506755ff5637d800d5daa15212e7a094d751c1 HTTP/11" 200 None
+2024-10-07 20:00:25 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): civitai.com:443
+2024-10-07 20:00:26 - urllib3.connectionpool - DEBUG - https://civitai.com:443 "GET /api/v1/model-versions/by-hash/5aa30d94cdf7950a8b53a693682650ee061eddb128c5435a8f88defea73b2ac6 HTTP/11" 200 None

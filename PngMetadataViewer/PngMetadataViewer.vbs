@@ -1,0 +1,2 @@
+Set objShell = CreateObject("WScript.Shell")
+objShell.Run "C:\AliProjects\Python\.venv\Scripts\pythonw.exe C:\AliProjects\AliContextMenuUtilities\PngMetadataViewer\PngMetadataViewer.py """ & WScript.Arguments(0) & """", 0, False
