@@ -9,7 +9,7 @@ logging.basicConfig(
     handlers=[logging.FileHandler(log_file_path)]
 )
 logger = logging.getLogger(__name__)
-
+import time
 import sys
 import json
 import requests
@@ -26,7 +26,7 @@ from bs4 import BeautifulSoup
 from PIL import Image,ImageTk
 from io import BytesIO
 from readability import Document
-
+from queue import Queue
 
 API_URL_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
 MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
@@ -95,8 +95,6 @@ class MetadataGUI:
         self.master: tk.Tk = master
         self.file_path = file_path
         self.application_path = self.get_app_path()
-
-
         self.metadata: Metadata = Metadata.get_metadata(file_path)
         self.civit: Civit = Civit.get_civit(self.metadata.safetensors_hash)
         try:
@@ -104,6 +102,8 @@ class MetadataGUI:
         except Exception as e:
             logger.error(e, exc_info=1)
             self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.pretty_metadata}")
+        self.master.protocol("WM_DELETE_WINDOW", self.close_window)
+
 
     def get_app_path(self):
         if getattr(sys, 'frozen', False):
@@ -236,6 +236,7 @@ class MetadataGUI:
 
 
     def close_window(self, event=None):
+        self.civit and self.civit.close_sessions()
         self.master.destroy()
 
 
@@ -270,8 +271,8 @@ class MetadataGUI:
 
 #region Web
 class Civit:
+    NUM_SESSIONS = 2
     def __init__(self):
-        self.session = requests.Session()
         self.data = None #"versionID", "modelId","description", "modelName","trainedWords","imageUrls"
         self.model_id = None
         self.api_json = None
@@ -281,6 +282,12 @@ class Civit:
         self.version_description = None
         self.image_urls = None
         self.images = None
+        self.session_pool = Queue()
+        self.sessions = []
+        for _ in range(self.NUM_SESSIONS):  # Adjust the number of sessions
+            session = requests.Session()
+            self.session_pool.put(session)
+            self.sessions.append(session)
 
 
     @staticmethod
@@ -293,8 +300,12 @@ class Civit:
     def _parse(self, safetensors_hash):
         self.api_json = self._fetch_model_api_json(safetensors_hash)
         self.data = self._extract_model_data(self.api_json) #"versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
-        self.html_text = self._fetch_model_page_html()
-        self.images = self._fetch_images_concurrently(self.image_urls)
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_html = executor.submit(self._fetch_model_page_html)
+            future_images = executor.submit(self._fetch_images_concurrently, self.image_urls, executor)
+            self.html_text = future_html.result()
+            self.images = future_images.result()
 
 
     def html_to_markdown(self, html_text):
@@ -304,26 +315,25 @@ class Civit:
         return markdown_text.strip()
 
 
-    def _fetch_images_concurrently(self, image_urls):
+    def _fetch_images_concurrently(self, image_urls, executor):
         images = []
-        with self.session as session:
-            with concurrent.futures.ThreadPoolExecutor() as executor:
-                futures = [executor.submit(self._fetch_image, session, url) for url in image_urls]
-                for i, future in enumerate(concurrent.futures.as_completed(futures)):
-                    image_bytes = future.result()
-                    if image_bytes:
-                        try:
-                            image = Image.open(BytesIO(image_bytes))
-                            images.append(image)
-                            logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
-                        except Exception as e:
-                            logging.error(f"Error processing image {i+1}/{len(image_urls)}: {e}")
-                    else:
-                        logging.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
+        futures = [executor.submit(self._fetch_image, url) for url in image_urls]
+        for i, future in enumerate(concurrent.futures.as_completed(futures)):
+            image_bytes = future.result()
+            if image_bytes:
+                try:
+                    image = Image.open(BytesIO(image_bytes))
+                    images.append(image)
+                    #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
+                except Exception as e:
+                    logging.error(f"Error processing image {i+1}/{len(image_urls)}: {e}")
+            else:
+                logging.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
         return images
 
 
-    def _fetch_image(self,session, url):
+    def _fetch_image(self, url):
+        session = self.session_pool.get()
         try:
             response = session.get(url)
             response.raise_for_status()  # Raise an HTTPError for bad responses
@@ -331,32 +341,43 @@ class Civit:
         except requests.exceptions.RequestException as e:
             logging.error(f"Error fetching {url}: {e}")
             return None
+        finally:
+            self.session_pool.put(session)
 
 
     def _fetch_model_api_json(self, safetensors_hash):
         url = API_URL_PREFIX + str(safetensors_hash)
+        session = self.session_pool.get()
         try:
-            # Fetch the image from the URL
-            response = self.session.get(url)
+            response = session.get(url)
             response.raise_for_status()  # Check if the request was successful
             soup = BeautifulSoup(response.text, 'html.parser')
             text = soup.get_text(separator='\n', strip=True)
             return text
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
+        finally:
+            self.session_pool.put(session)
 
 
     def _fetch_model_page_html(self):
         model_url = MODEL_PAGE_URL_PREFIX + self.model_id + MODEL_PAGE_VERSION_PREFIX + self.version_id
+        session = self.session_pool.get()
         try:
-            # Fetch the htrml from the URL
-            response = self.session.get(model_url)
+            response = session.get(model_url)
             response.raise_for_status()  # Check if the request was successful
             html_doc = Document(response.text)
-
             return self.html_to_markdown(html_doc.summary())
         except Exception as e:
             logger.error(f"Failed to load html from {model_url}: {e}")
+        finally:
+            self.session_pool.put(session)
+
+
+    def close_sessions(self):
+        print(len(self.sessions))
+        for session in self.sessions:
+            session.close()
 
 
     def _extract_model_data(self, json_data):
