@@ -20,15 +20,18 @@ import webbrowser
 import numpy as np
 
 import tkinter as tk
+from html2text import HTML2Text
 from tkinter import Text, Scrollbar, Canvas, Frame
 from bs4 import BeautifulSoup
 from PIL import Image,ImageTk
 from io import BytesIO
+from readability import Document
 
 
 API_URL_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
 MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
-TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\_Scoring\_Concept\Pony_XL_AllTheWayThrough_Concept.safetensors"
+MODEL_PAGE_VERSION_PREFIX = "?modelVersionId="
+TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_Top\Pony_XL_Aaaa_2_Style.safetensors"
 
 class SafetensorsException(Exception):
     def __init__(self, msg:str):
@@ -46,7 +49,6 @@ class SafetensorsException(Exception):
 
 
 def extract_model_text_BROKEN(model_id):
-    MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
     model_url = MODEL_PAGE_URL_PREFIX + str(model_id)
 
     def safe_get(d, keys, default=None):
@@ -94,16 +96,14 @@ class MetadataGUI:
         self.file_path = file_path
         self.application_path = self.get_app_path()
 
-        self.metadata: Metadata = self.metadata.get_metadata(file_path)
-        self.civit: Civit = self.civit.get_civit(file_path)
-        self.build_main_window()
+
+        self.metadata: Metadata = Metadata.get_metadata(file_path)
+        self.civit: Civit = Civit.get_civit(self.metadata.safetensors_hash)
         try:
-            self.build_main_window(self.civit, self.metadata)
+            self.build_main_window()
         except Exception as e:
             logger.error(e, exc_info=1)
             self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.pretty_metadata}")
-
-
 
     def get_app_path(self):
         if getattr(sys, 'frozen', False):
@@ -114,13 +114,15 @@ class MetadataGUI:
 
 
 #region Framework
-    def build_main_window(self,  model_hash, model_name, initial_text_height=1):
-        self.master.title(self.civit_data["modelName"])
+    def build_main_window(self, initial_text_height=1):
+        self.master.title(self.civit.model_name)
         self.master.geometry("1600x1250")  # Set the initial window size
         self.master.resizable(False, True)
         self.master.grid_rowconfigure(0, weight=10,minsize=500)
-        self.master.grid_rowconfigure(1, weight=0, minsize=self.initial_text_height)
+        self.master.grid_rowconfigure(1, weight=0, minsize=initial_text_height)
         self.master.grid_columnconfigure(0, weight=1)
+        self.master.bind('<Escape>', self.close_window)
+        self.master.bind('<Control-w>', self.close_window)
 
         image_frame = Frame(self.master)
         image_frame.grid(row=0, column=0, sticky='nsew')
@@ -133,34 +135,16 @@ class MetadataGUI:
         scrollable_frame = Frame(canvas)
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
-
-        model_preview_images = self.create_collage(self.civit.image_urls)
-        collage_tk = ImageTk.PhotoImage(model_preview_images)
-        label = tk.Label(scrollable_frame, image=collage_tk)
+        model_preview_images = self.create_collage(self.civit.images)
+        self.collage_tk = ImageTk.PhotoImage(model_preview_images)
+        label = tk.Label(scrollable_frame, image=self.collage_tk)
         label.pack()
+        label.bind("<MouseWheel>", lambda e: self.on_mousewheel(e, canvas))
+        label.bind("<Shift-MouseWheel>", lambda e: self.on_shift_mousewheel(e, canvas))
         canvas.grid(row=0, column=0, sticky='nsew')
-        scrollbar_y.grid(row=0, column=1, sticky='ns')
-        scrollbar_x.grid(row=1, column=0, sticky='ew')
-        text_frame = Frame(self.master,height=self.initial_text_height)
-        text_frame.grid(row=1, column=0, sticky='nsew')
-        text_frame.grid_rowconfigure(0, weight=0,minsize=1)
-        text_frame.grid_columnconfigure(0, weight=1)
-        text_frame.grid_propagate(False)  # Prevent the frame from resizing to fit the text widget
-        scrollbar_text = Scrollbar(text_frame)
-        scrollbar_text.pack(side='right', fill='y')
-        text_widget = Text(text_frame, wrap='word', yscrollcommand=scrollbar_text.set)
-        text_widget.pack(fill='both', expand=True)
-        scrollbar_text.config(command=text_widget.yview)
+        canvas.bind("<MouseWheel>", lambda e: self.on_mousewheel(e, canvas))
+        canvas.bind("<Shift-MouseWheel>", lambda e: self.on_shift_mousewheel(e, canvas))
 
-        #"modelId","modelName","trainedWords","imageUrls"
-        self.add_hyperlink(text_widget, self.civit.model_id, f"Model Page: {self.civit.model_name}")
-        trained_words = ",\n".join(self.civit.trained_words)
-        text_widget.insert('2.0', f"\n\nModel Hash: {self.metadata.model_hash}\n\n----\nDescription:\n\n{self.civit.model_name}\n\n----\nTrained Words:\n\n{self.civit.trained_words}\n\n----\nImplicit Data:\n\n{self.metadata.pretty_text}")
-        text_widget.config(state='normal')  # Make the text widget editable
-
-        canvas.bind_all("<MouseWheel>", lambda e: self.on_mousewheel(e, canvas))
-        canvas.bind_all("<Shift-MouseWheel>", lambda e: self.on_shift_mousewheel(e, canvas))
-        self.master.bind('<Escape>', self.close_window)
         scrollable_frame.bind(
             "<Configure>",
             lambda e: canvas.configure(
@@ -168,8 +152,36 @@ class MetadataGUI:
             )
         )
 
+        scrollbar_y.grid(row=0, column=1, sticky='ns')
+        scrollbar_x.grid(row=1, column=0, sticky='ew')
+        text_frame = Frame(self.master,height=initial_text_height)
+        text_frame.grid(row=1, column=0, sticky='nsew')
+        text_frame.grid_rowconfigure(0, weight=0,minsize=1)
+        text_frame.grid_columnconfigure(0, weight=1)
+        text_frame.grid_propagate(False)  # Prevent the frame from resizing to fit the text widget
+
+
+        text_widget = Text(text_frame, wrap='word')
+        scrollbar_text = Scrollbar(text_frame)
+        scrollbar_text.pack(side='right', fill='y')
+        text_widget.pack(fill='both', expand=True)
+        text_widget.configure(yscrollcommand=scrollbar_text.set)
+        scrollbar_text.config(command=text_widget.yview)
+
+        #"versionId", "modelId","modelName","trainedWords","imageUrls"
+        self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
+        self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
+        self.add_text_block(text_widget, "Trained Words", self.civit.trained_words)
+        self.add_text_block(text_widget, "Top 10 Tags", self.metadata.rec_tags)
+        self.add_text_block(text_widget, "Version Description", self.civit.version_description)
+        self.add_text_block(text_widget, "Model Description", self.civit.html_text)
+        self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
+
+        text_widget.config(state='normal')  # Make the text widget editable
+
 
     def build_fallback_window(self, pretty_text):
+        self.master.title(self.file_path)
         default_height = 500
         default_width = 350
         self.master.geometry(f"{default_width}x{default_height}")
@@ -188,20 +200,30 @@ class MetadataGUI:
 
 
 
-    def on_mousewheel(self, event, canvas):
-        canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+    def on_mousewheel(self, event, widget):
+        widget.yview_scroll(int(-1*(event.delta/120)), "units")
 
-
-    def on_shift_mousewheel(self, event, canvas):
-        canvas.xview_scroll(int(-1*(event.delta/120)), "units")
+    def on_shift_mousewheel(self, event, widget):
+        widget.xview_scroll(int(-1*(event.delta/120)), "units")
 
 
     def open_url(self, url):
         webbrowser.open_new(url)
 
 
-    def add_hyperlink(self, text_widget, model_id, display_text):
-        model_url = MODEL_PAGE_URL_PREFIX + str(model_id)
+    def add_text_block(self, text_widget:tk.Text, display_title, display_text):
+        text_title = f"{display_title}:"
+        text_body = f"\n{display_text}\n\n"
+        title_tag = "border_text"
+        text_widget.insert(tk.END, text_title, title_tag)
+        text_widget.tag_config(title_tag, border=10, borderwidth=1, relief="solid")
+        tag_name = f"text_block"
+        text_widget.insert(tk.END, text_body, tag_name)
+        text_widget.tag_config(tag_name, lmargin1=20, lmargin2=20)
+
+
+    def add_hyperlink(self, text_widget:tk.Text, version_id, model_id, display_text):
+        model_url = MODEL_PAGE_URL_PREFIX + str(model_id) + MODEL_PAGE_VERSION_PREFIX + version_id
         def click(event):
             self.open_url(model_url)
             return "break"
@@ -218,8 +240,7 @@ class MetadataGUI:
 
 
     #region GUI Logic
-    def create_collage(self, image_urls, cols=4, max_thumbnail_size=(400, 400)):
-        images = self.fetch_images_concurrently(image_urls)
+    def create_collage(self, images, cols=4, max_thumbnail_size=(400, 400)):
         if not images:
             logger.error("No images to create a collage.")
             return None
@@ -251,26 +272,36 @@ class MetadataGUI:
 class Civit:
     def __init__(self):
         self.session = requests.Session()
-        self.data = None #"modelId","description", "modelName","trainedWords","imageUrls"
+        self.data = None #"versionID", "modelId","description", "modelName","trainedWords","imageUrls"
         self.model_id = None
+        self.api_json = None
+        self.html_text = None
         self.trained_words = None
         self.model_name = None
-        self.description = None
+        self.version_description = None
         self.image_urls = None
         self.images = None
 
 
     @staticmethod
-    def get_civit(safetensors_hash, parseheader=True, quiet=True):
+    def get_civit(safetensors_hash):
         web_handler: Civit = Civit()
-        web_handler._parse(safetensors_hash, quiet, parseheader)
+        web_handler._parse(safetensors_hash)
         return web_handler
 
 
-    def _parse(self, safetensors_hash, quiet=True, parseheader=True):
-        self.json = self._fetch_model_json(safetensors_hash)
-        self.data = self._extract_model_data(self.json) #"modelId","description", "modelName","trainedWords","imageUrls"
+    def _parse(self, safetensors_hash):
+        self.api_json = self._fetch_model_api_json(safetensors_hash)
+        self.data = self._extract_model_data(self.api_json) #"versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
+        self.html_text = self._fetch_model_page_html()
         self.images = self._fetch_images_concurrently(self.image_urls)
+
+
+    def html_to_markdown(self, html_text):
+        html_converter = HTML2Text()
+        html_converter.ignore_links = False  # Keep links in the output
+        markdown_text = html_converter.handle(html_text)
+        return markdown_text.strip()
 
 
     def _fetch_images_concurrently(self, image_urls):
@@ -292,9 +323,9 @@ class Civit:
         return images
 
 
-    def _fetch_image(self, url):
+    def _fetch_image(self,session, url):
         try:
-            response = self.session.get(url)
+            response = session.get(url)
             response.raise_for_status()  # Raise an HTTPError for bad responses
             return response.content
         except requests.exceptions.RequestException as e:
@@ -302,7 +333,7 @@ class Civit:
             return None
 
 
-    def _fetch_model_json(self, safetensors_hash):
+    def _fetch_model_api_json(self, safetensors_hash):
         url = API_URL_PREFIX + str(safetensors_hash)
         try:
             # Fetch the image from the URL
@@ -312,26 +343,45 @@ class Civit:
             text = soup.get_text(separator='\n', strip=True)
             return text
         except Exception as e:
-            logger.error(f"Failed to load json from {url}: {e}")
+            logger.error(f"Failed to load api_json from {url}: {e}")
+
+
+    def _fetch_model_page_html(self):
+        model_url = MODEL_PAGE_URL_PREFIX + self.model_id + MODEL_PAGE_VERSION_PREFIX + self.version_id
+        try:
+            # Fetch the htrml from the URL
+            response = self.session.get(model_url)
+            response.raise_for_status()  # Check if the request was successful
+            html_doc = Document(response.text)
+
+            return self.html_to_markdown(html_doc.summary())
+        except Exception as e:
+            logger.error(f"Failed to load html from {model_url}: {e}")
 
 
     def _extract_model_data(self, json_data):
         def clean_json(json_str):
             json_str = re.sub(r'[\x00-\x1F\x7F]', '', json_str)
             return json_str
+
         if isinstance(json_data, str):
             json_data = json.loads(clean_json(json_data))
+        # AliRecursiveJSONLoader(json_data)
+        # logger.debug(json.dumps(json_data, indent=2))
         extracted_data = {
             "modelId": None,
+            "versionId": None,
             "modelName": "",
             "trainedWords": [],
-            "description": "",
+            "version_description": "",
             "imageUrls": []
         }
+        if 'id' in json_data:
+            extracted_data["versionId"] = json_data["id"]
         if 'modelId' in json_data:
             extracted_data["modelId"] = json_data["modelId"]
         if 'description' in json_data:
-            extracted_data["description"] = json_data["description"]
+            extracted_data["version_description"] = json_data["description"]
         if 'model' in json_data:
             model_name = json_data["model"]["name"]
             if 'name' in json_data:
@@ -343,10 +393,11 @@ class Civit:
             for image in json_data['images']:
                 if 'url' in image:
                     extracted_data["imageUrls"].append(image['url'])
+        self.version_id = str(extracted_data["versionId"])
         self.model_id = str(extracted_data["modelId"])
         self.model_name = str(extracted_data["modelName"])
-        self.trained_words = str(extracted_data["trainedWords"])
-        self.description = str(extracted_data["description"])
+        self.trained_words =",\n".join(extracted_data["trainedWords"])
+        self.version_description = str(extracted_data["version_description"])
         self.image_urls = extracted_data["imageUrls"]
         return extracted_data
 
@@ -511,7 +562,7 @@ class Metadata:
             pretty_tags = json.dumps(filtered_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
             stripped_tags = pretty_tags.strip("{} \n")
             rec_tags = self._get_top_tags(filtered_tags, tag_count)
-            metadata_report = f"{stripped_tags}\n\nTop {tag_count} tags:\n{rec_tags}\n\nMetadata:\n{pretty_metadata}"
+            metadata_report = f"{stripped_tags}\n\nMetadata:\n{pretty_metadata}"
             self.rec_tags = rec_tags
             self.stripped_tags = stripped_tags
         else:
@@ -519,8 +570,7 @@ class Metadata:
         #logger.debug(f"::::{pretty_metadata}")
         self.metadata_dict = metadata
         self.pretty_metadata = pretty_metadata
-        self.metadata_report = metadata_report
-
+        return metadata_report
 
     def _get_top_tags(self, dictionary:dict, amount:int):
         if amount <= 0:
@@ -530,11 +580,11 @@ class Metadata:
 
 
     def _get_filtered_tags(self, ss_tag_frequency_dict: dict):
-        def filter_above_percentile(percentile: float) -> dict:
+        def filter_above_percentile(ss_tag_frequency_dict, percentile: float) -> dict:
             values = list(ss_tag_frequency_dict.values())
             # Compute the percentile threshold
             threshold = np.percentile(values, percentile)
-            filtered_data = {k: v for k, v in filtered_ss_tag_frequency_dict.items() if v >= threshold}
+            filtered_data = {k: v for k, v in ss_tag_frequency_dict.items() if v >= threshold}
             return filtered_data
 
         def sort_dict_by_values(data: dict) -> dict:

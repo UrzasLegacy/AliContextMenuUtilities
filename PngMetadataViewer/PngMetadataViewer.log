@@ -9202,3 +9202,46 @@ Traceback (most recent call last):
   File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 355, in raw_decode
     raise JSONDecodeError("Expecting value", s, err.value) from None
 json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'IHDR' 16 13
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'tEXt' 41 16862
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'tEXt' 16915 270134
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'tEXt' 287061 450
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'tEXt' 287523 402
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'tEXt' 287937 736
+2024-11-07 04:06:12 - PIL.PngImagePlugin - DEBUG - STREAM b'IDAT' 288685 65536
+2024-11-07 04:06:12 - root - ERROR - data: Initial - Model: FindForgetYou_v2, VAE: sdxl_vae, Loras: [<lora:Balsamique_Style:0.8>], Seed: 129662, Denoise: 1, Steps: 25, CFG: 7, Sampler: euler_ancestral, Scheduler: normal, Positive: score_9, score_8_up, score_7_up BREAK cute, 1girl, 1boy, reverse upright straddle, high ponytail, medium breasts, happy, noseblush, monroe piercing, rating_explicit
+BodyDetail - , Seed: 0, Denoise: 0.3
+corrected data: Initial - Model: FindForgetYou_v2, VAE: sdxl_vae, Loras: [<lora:Balsamique_Style:0.8>], Seed: 129662, Denoise: 1, Steps: 25, CFG: 7, Sampler: euler_ancestral, Scheduler: normal, Positive: score_9, score_8_up, score_7_up BREAK cute, 1girl, 1boy, reverse upright straddle, high ponytail, medium breasts, happy, noseblush, monroe piercing, rating_explicit
+BodyDetail - , Seed: 0, Denoise: 0.3
+Traceback (most recent call last):
+  File "C:\AliProjects\AliContextMenuUtilities\PngMetadataViewer\PngMetadataViewer.py", line 35, in context_menu_execute
+    data_dict = json.loads(corrected_json_string)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+2024-11-07 04:06:12 - root - ERROR - data: score_9, score_8_up, score_7_up BREAK cute, 1girl, 1boy, reverse upright straddle, high ponytail, medium breasts, happy, noseblush, monroe piercing, rating_explicit
+Negative prompt: 
+Steps: 25, Sampler: euler_ancestral normal, CFG scale: 7, Seed: 129662, Size: , Model hash: 39feba5009, Model: FindForgetYou_v2, Denoising strength: 1, Upscaler:  1.0, Hashes: {"LORA:Balsamique_Style": "7970a8c696", "model": "39feba5009"}, Version: ComfyUI
+corrected data: score_9, score_8_up, score_7_up BREAK cute, 1girl, 1boy, reverse upright straddle, high ponytail, medium breasts, happy, noseblush, monroe piercing, rating_explicit
+Negative prompt: 
+Steps: 25, Sampler: euler_ancestral normal, CFG scale: 7, Seed: 129662, Size: , Model hash: 39feba5009, Model: FindForgetYou_v2, Denoising strength: 1, Upscaler:  1.0, Hashes: {"LORA:Balsamique_Style": "7970a8c696", "model": "39feba5009"}, Version: ComfyUI
+Traceback (most recent call last):
+  File "C:\AliProjects\AliContextMenuUtilities\PngMetadataViewer\PngMetadataViewer.py", line 35, in context_menu_execute
+    data_dict = json.loads(corrected_json_string)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\alist\AppData\Local\Programs\Python\Python311\Lib\json\decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
