@@ -241,22 +241,22 @@ class MetadataGUI:
 
 
     #region GUI Logic
-    def create_collage(self, images, cols=4, max_thumbnail_size=(400, 400)):
+    def create_collage(self, images, cols=4, thumbnail_size=(400,400)):
         if not images:
-            logger.error("No images to create a collage.")
+            logging.error("No images to create a collage.")
             return None
-        max_width, max_height = max_thumbnail_size
-        images = [self.resize_image(img, max_width, max_height) for img in images if img]
-        rows = (len(images) // cols) + (len(images) % cols > 0)
-        collage_width = cols * max_thumbnail_size[0]
-        collage_height = rows * max_thumbnail_size[1]
+        rows = (len(images) + cols - 1) // cols  # Ceiling division
+        thumb_width, thumb_height = thumbnail_size
+        collage_width = cols * thumb_width
+        collage_height = rows * thumb_height
         collage = Image.new('RGB', (collage_width, collage_height), (255, 255, 255))
-        for i, image in enumerate(images):
-            x = (i % cols) * max_thumbnail_size[0]
-            y = (i // cols) * max_thumbnail_size[1]
+        for index, image in enumerate(images):
+            row = index // cols
+            col = index % cols
+            x = col * thumb_width
+            y = row * thumb_height
             collage.paste(image, (x, y))
         return collage
-
 
     def resize_image(self, image, max_width, max_height):
         width_ratio = max_width / image.width
@@ -264,9 +264,6 @@ class MetadataGUI:
         min_ratio = min(width_ratio, height_ratio)
         new_size = (int(image.width * min_ratio), int(image.height * min_ratio))
         return image.resize(new_size, Image.LANCZOS)
-
-
-
 
 
 #region Web
@@ -319,25 +316,24 @@ class Civit:
         images = []
         futures = [executor.submit(self._fetch_image, url) for url in image_urls]
         for i, future in enumerate(concurrent.futures.as_completed(futures)):
-            image_bytes = future.result()
-            if image_bytes:
-                try:
-                    image = Image.open(BytesIO(image_bytes))
-                    images.append(image)
-                    #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
-                except Exception as e:
-                    logging.error(f"Error processing image {i+1}/{len(image_urls)}: {e}")
+            image = future.result()
+            if image:
+                images.append(image)
+                #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
             else:
                 logging.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
         return images
 
 
-    def _fetch_image(self, url):
+    def _fetch_image(self, url, thumbnail_size=(400,400)):
         session = self.session_pool.get()
         try:
             response = session.get(url)
             response.raise_for_status()  # Raise an HTTPError for bad responses
-            return response.content
+            image = Image.open(BytesIO(response.content))
+            image.thumbnail(thumbnail_size, Image.BICUBIC)
+            return image
+
         except requests.exceptions.RequestException as e:
             logging.error(f"Error fetching {url}: {e}")
             return None
@@ -375,7 +371,6 @@ class Civit:
 
 
     def close_sessions(self):
-        print(len(self.sessions))
         for session in self.sessions:
             session.close()
 
@@ -765,7 +760,9 @@ def AliRecursiveJSONLoader(data: dict) -> None:
 
 def main(file_path=""):
     root = tk.Tk()
+    s = time.time()
     app = MetadataGUI(root, file_path)
+    print("e:", time.time() - s)
     root.mainloop()
 
 
