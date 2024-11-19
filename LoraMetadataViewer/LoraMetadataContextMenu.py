@@ -19,22 +19,27 @@ import concurrent.futures
 import webbrowser
 import numpy as np
 
-try:
-    import tkinter as tk
-    from tkinter import Text, Scrollbar, Canvas, Frame
-    from bs4 import BeautifulSoup
-    from PIL import Image,ImageTk
-    from io import BytesIO
-    from queue import Queue
-    from html2text import HTML2Text
-    from readability import Document
-except Exception as e:
-    logger.debug(e)
+from requests.cookies import RequestsCookieJar
+import pyperclip
+import tkinter as tk
+from html2text import HTML2Text
+from tkinter import Text, Scrollbar, Canvas, Frame
+from bs4 import BeautifulSoup
+from PIL import Image,ImageTk
+from io import BytesIO
+from readability import Document
+from queue import Queue
 
 API_URL_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
 MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
 MODEL_PAGE_VERSION_PREFIX = "?modelVersionId="
-TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_Top\Pony_XL_Aaaa_2_Style.safetensors"
+access_cookie = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..2lx17VfhTNqdg30q.qy9nv_atXOiL4u7j5luNUDX4n9p6icszdhM0tPJXyI-84-RjOZNSPGvIyuyaQtz2iLhYNtZ9Pfdk9HtEXNgnwLgQmPelXctW57b_riiwXeSc4Q3W779XbheDlohi49-SdZUop7bvZTvLmnM7PxQM5phlOFI7u0R5obgmXJxBmTk_IoMLnMVGg6rKTSw6RMfxPeqHxmtvSi9IK_CHirLQgmuh_kfCR_IFy2aHYwYULbVROEwsPWm1EEiTGEFseXnzRZU4m9pah2qDrUtlXvyg18gVnJFP6M0fdfD-gFFrm8fqh6Ma36HN-hOFvgJ_hQ-IBAGqaIP-jxBBsNzpD00OBN37pcW6qWxx1wPVdsFxUeKXwEyCuCjYIXU9HIJUjNnu9_pOpxUvgK9wNJXL_qEZip33N_TwaCpRCK1tJDq-KxgWNA1SJxY4Vb1EQ2TJhgFwAo5_q8QfwUeqV1VC_GEWsG7G3zXjFxWTOg1bAHm9kKdUsVnBDoIWB02n4zK6D2GO8XfkVvs-iGwV4iWPkV8EQg6gBPgm1YHlvAnupN_AeITKxrGTJmmIvDx0RDlKxQLvNsEI58oGhqPHtQ7VMKBvnzqwdacR8f5XjCdZu1W1XM4vBdTVbFC_bjVUwNgyzbPtkxQBzZxIt2NoyYc2y_ddA312LIZ8xA26DquoC_nq9Y1B9DxbB14yPt7lT1xXtaZEi8wDpRHWkTQEt0U4tYumMc9H2vlZGIawdHZwn34gqFUzDuIGt0s_dBONk8JGRSCZZGkzjahHvZqeoxduNEpW15DMFQZKaB8Im8Lo7d85VUQN0kYt4cCHmUjGKmCkyOe7rPx6_RdPzMuC2eTibmMaH8mdhfgDWl-mSc4Sha2lP7I0vaIVIervcJPbZdGQshV5GGzhzlfMpWUL4J-PbCY_ZNi7yJv6gZgplyP5N5lNcKT1x5iXWwfW6h2NiNJUq6RAHQaYnABMLWG-8oZ1vdUXOSfFzqZhw0n8Droxc0VxNTtoJiJZKGoZYmrWsGX5DsSWOnwKwXx4XZZ_jlKJBfkrGiRIUAjbw5KIpaGmwBizQaU0rngkqa0hYYe74u018fV8rJvBhd8XjwnCLj_du4jwft2itg8_hCyCug9GrfjnwyyBU9w-a81wGKUrIaXHLHafdsOtobOZHjPFl-YXzbipDI6wFjFZkYVUyVkdmwGHDVpeAtmrb6cAywSWHyzFdiGAMMHPf9toVqY2Kxgb0HUewJb7F2VUrvqFx6T_kVFB.ntqp8RClwghIRJ8nJWkMsg"
+
+#TODO sort image urls so their display order is consistent
+#TODO add file path display
+#TODO add model author display
+#TODO autoadd model to hash dictionary C:\AliProjects\StableDiffusion\AliComfy\AliNodes\AliHashes.json
+    #TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
 
 class SafetensorsException(Exception):
     def __init__(self, msg:str):
@@ -48,46 +53,6 @@ class SafetensorsException(Exception):
 
     def __str__(self):
         return self.msg
-
-
-
-def extract_model_text_BROKEN(model_id):
-    model_url = MODEL_PAGE_URL_PREFIX + str(model_id)
-
-    def safe_get(d, keys, default=None):
-        for key in keys:
-            try:
-                d = d[key]
-            except (KeyError, IndexError, TypeError):
-                return default
-        return d
-
-    # Fetch the image from the URL
-    response = requests.get(model_url)
-    response.raise_for_status()  # Check if the request was successful
-    response.encoding = "utf-8"
-    soup = BeautifulSoup(response.text, 'html.parser')
-    script_tag = soup.find('script', type='application/json')
-    if script_tag:
-        try:
-
-            data = json.loads(script_tag.string)
-            keys = ["props", "pageProps", "trpcState", "json", "queries", -1, "state", "data", "description"]
-            pull = safe_get(data, keys) #data["props"]["pageProps"]["trpcState"]["json"]["queries"][-1]["state"]["data"]["description"]
-            soup = BeautifulSoup(pull, "html.parser")
-
-            description_text= soup.get_text(separator="\n", strip=True).strip()
-            return description_text
-        except json.JSONDecodeError as e:
-            print(f"Failed to decode JSON: {e}")
-            return None
-    else:
-        print("No <script> tag with type 'application/ld+json' found.")
-        return None
-
-
-
-
 
 
 #region MetadataGUI
@@ -104,7 +69,7 @@ class MetadataGUI:
             self.build_main_window()
         except Exception as e:
             logger.error(e, exc_info=1)
-            self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.pretty_metadata}")
+            self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.rec_tags}\n\n{self.metadata.pretty_metadata}")
         self.master.protocol("WM_DELETE_WINDOW", self.close_window)
 
 
@@ -117,6 +82,7 @@ class MetadataGUI:
 
 
 #region Framework
+
     def build_main_window(self, initial_text_height=1):
         self.master.title(self.civit.model_name)
         self.master.geometry("1600x1250")  # Set the initial window size
@@ -174,24 +140,32 @@ class MetadataGUI:
         #"versionId", "modelId","modelName","trainedWords","imageUrls"
         self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
+        self.add_ez_copy(text_widget)
+        self.add_text_block(text_widget, "Extra Floats", self.civit.extra_floats)
         self.add_text_block(text_widget, "Trained Words", self.civit.trained_words)
+        self.add_text_block(text_widget, "Suggested Strength", self.civit.strength)
         self.add_text_block(text_widget, "Top 10 Tags", self.metadata.rec_tags)
         self.add_text_block(text_widget, "Version Description", self.civit.version_description)
         self.add_text_block(text_widget, "Model Description", self.civit.html_text)
         self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
 
         text_widget.config(state='normal')  # Make the text widget editable
+        self.dict_entry()
 
 
     def build_fallback_window(self, pretty_text):
         self.master.title(self.file_path)
         default_height = 500
-        default_width = 350
+        default_width = 800
         self.master.geometry(f"{default_width}x{default_height}")
+        self.master.resizable(True, True)
+        self.master.bind('<Escape>', self.close_window)
+        self.master.bind('<Control-w>', self.close_window)
         self.master.grid_rowconfigure(0, weight=1)
         self.master.grid_columnconfigure(0, weight=1)
         self.master.grid_columnconfigure(1, weight=0)
         text_widget = tk.Text(self.master, wrap='word')
+        self.add_ez_copy(text_widget)
         text_widget.insert(tk.END, f"{pretty_text}")
         text_widget.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         scrollbar = tk.Scrollbar(self.master, orient=tk.VERTICAL, command=text_widget.yview)
@@ -200,7 +174,6 @@ class MetadataGUI:
         # Disable editing
         text_widget.config(state=tk.DISABLED)
         text_widget.config(yscrollcommand=scrollbar.set)
-
 
 
     def on_mousewheel(self, event, widget):
@@ -236,6 +209,28 @@ class MetadataGUI:
         text_widget.tag_bind(tag_name, "<Enter>", lambda e: text_widget.config(cursor="hand2"))
         text_widget.tag_bind(tag_name, "<Leave>", lambda e: text_widget.config(cursor=""))
         text_widget.tag_bind(tag_name, "<Button-1>", click)
+        self.master.bind('<space>', click)
+
+
+    def add_ez_copy(self, text_widget:tk.Text):
+        dict_template = ensure_double_backslashes(self.dict_entry())
+        def click(event):
+            text = f"\t{dict_template}\n"
+            pyperclip.copy(text)
+            return "break"
+        tag_name = f"ez_copy"
+        title_tag = "border_text"
+        text_widget.insert(tk.END,"Dictionary Template:",title_tag)
+        text_widget.insert(tk.END,"\n")
+        text_widget.tag_config(title_tag, border=10, borderwidth=1, relief="solid")
+
+        text_widget.insert(tk.END, dict_template, tag_name)
+        text_widget.tag_config(tag_name, foreground="blue", underline=True)
+        text_widget.tag_bind(tag_name, "<Enter>", lambda e: text_widget.config(cursor="hand2"))
+        text_widget.tag_bind(tag_name, "<Leave>", lambda e: text_widget.config(cursor=""))
+        text_widget.tag_bind(tag_name, "<Button-1>", click)
+        text_widget.insert(tk.END, "\n\n")
+        self.master.bind('<`>', click)
 
 
     def close_window(self, event=None):
@@ -244,19 +239,21 @@ class MetadataGUI:
 
 
     #region GUI Logic
-    def create_collage(self, images, cols=4, max_thumbnail_size=(400, 400)):
+
+    def create_collage(self, images, cols=4, thumbnail_size=(400,400)):
         if not images:
-            logger.error("No images to create a collage.")
+            logging.error("No images to create a collage.")
             return None
-        max_width, max_height = max_thumbnail_size
-        images = [self.resize_image(img, max_width, max_height) for img in images if img]
-        rows = (len(images) // cols) + (len(images) % cols > 0)
-        collage_width = cols * max_thumbnail_size[0]
-        collage_height = rows * max_thumbnail_size[1]
+        rows = (len(images) + cols - 1) // cols  # Ceiling division
+        thumb_width, thumb_height = thumbnail_size
+        collage_width = cols * thumb_width
+        collage_height = rows * thumb_height
         collage = Image.new('RGB', (collage_width, collage_height), (255, 255, 255))
-        for i, image in enumerate(images):
-            x = (i % cols) * max_thumbnail_size[0]
-            y = (i // cols) * max_thumbnail_size[1]
+        for index, image in enumerate(images):
+            row = index // cols
+            col = index % cols
+            x = col * thumb_width
+            y = row * thumb_height
             collage.paste(image, (x, y))
         return collage
 
@@ -269,10 +266,22 @@ class MetadataGUI:
         return image.resize(new_size, Image.LANCZOS)
 
 
+    def dict_entry(self):
+        only_1_extra_float = self.civit.extra_floats and len(self.civit.extra_floats) <= 3 and len(self.civit.extra_floats.split(',')) == 1
+
+        template = 	f'"' +\
+        f'{self.metadata.lora_key}' +\
+        '": {"POSITIVE": "' +\
+        f'{self.civit.trained_words if self.civit.trained_words else ""}' +\
+        '", "WEIGHT": "' +\
+        f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}' +\
+        f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.rec_tags}"}},'
+        return template
 
 
 
 #region Web
+
 class Civit:
     NUM_SESSIONS = 2
     def __init__(self):
@@ -283,7 +292,8 @@ class Civit:
         self.trained_words = None
         self.model_name = None
         self.version_description = None
-        self.image_urls = None
+        self.strength = None
+        self.image_urls = []
         self.images = None
         self.session_pool = Queue()
         self.sessions = []
@@ -303,12 +313,12 @@ class Civit:
     def _parse(self, safetensors_hash):
         self.api_json = self._fetch_model_api_json(safetensors_hash)
         self.data = self._extract_model_data(self.api_json) #"versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
-
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future_html = executor.submit(self._fetch_model_page_html)
             future_images = executor.submit(self._fetch_images_concurrently, self.image_urls, executor)
-            self.html_text = future_html.result()
+            self.html_text, self.strength = future_html.result()
             self.images = future_images.result()
+        self.extra_floats = self._pull_floats()
 
 
     def html_to_markdown(self, html_text):
@@ -322,27 +332,26 @@ class Civit:
         images = []
         futures = [executor.submit(self._fetch_image, url) for url in image_urls]
         for i, future in enumerate(concurrent.futures.as_completed(futures)):
-            image_bytes = future.result()
-            if image_bytes:
-                try:
-                    image = Image.open(BytesIO(image_bytes))
-                    images.append(image)
-                    #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
-                except Exception as e:
-                    logging.error(f"Error processing image {i+1}/{len(image_urls)}: {e}")
+            image = future.result()
+            if image:
+                images.append(image)
+                #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
             else:
-                logging.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
+                logger.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
         return images
 
 
-    def _fetch_image(self, url):
+    def _fetch_image(self, url, thumbnail_size=(400,400)):
         session = self.session_pool.get()
         try:
             response = session.get(url)
             response.raise_for_status()  # Raise an HTTPError for bad responses
-            return response.content
+            image = Image.open(BytesIO(response.content))
+            image.thumbnail(thumbnail_size, Image.BICUBIC)
+            return image
+
         except requests.exceptions.RequestException as e:
-            logging.error(f"Error fetching {url}: {e}")
+            logger.error(f"Error fetching {url}: {e}")
             return None
         finally:
             self.session_pool.put(session)
@@ -359,31 +368,82 @@ class Civit:
             return text
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
+            return ""
         finally:
             self.session_pool.put(session)
 
 
     def _fetch_model_page_html(self):
+        if not self.model_id or not self.version_id:
+            return "", ""
+        cookies = RequestsCookieJar()
+        cookies.set("__Secure-civitai-token", access_cookie)
         model_url = MODEL_PAGE_URL_PREFIX + self.model_id + MODEL_PAGE_VERSION_PREFIX + self.version_id
-        session = self.session_pool.get()
+        session:requests.Session = self.session_pool.get()
         try:
-            response = session.get(model_url)
+            response = session.get(model_url,cookies=cookies)
             response.raise_for_status()  # Check if the request was successful
             html_doc = Document(response.text)
-            return self.html_to_markdown(html_doc.summary())
+            match = re.search(r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (0\.8)</span>', response.text)
+            strength_result = match.group(1) if match else ""
+            return (self.html_to_markdown(html_doc.summary()), strength_result)
         except Exception as e:
             logger.error(f"Failed to load html from {model_url}: {e}")
+            return ""
         finally:
             self.session_pool.put(session)
 
 
+    def _pull_floats(self):
+        floats_string = ""
+        pattern = r'(?<!\()\b\d+\.\d+\b(?:\s*[-to]+\s*\d+\.\d+)?(?!\))'
+        matches = re.findall(pattern, self.html_text)
+        floats_list = [" ".join(match) for match in map(str.split, matches)]
+        if len(floats_list) > 1:
+            floats_string = f"<{ ', '.join(floats_list)}>, "
+        else:
+            floats_string = self.safe_float_range_to_average_string(floats_list)
+        return floats_string
+
+
+    def safe_float_range_to_average_string(self, floats_list:list):
+        float_pre_string = "".join(floats_list)
+        if len(float_pre_string) < 3:
+            return ""
+        try:
+            float_range_list = re.split(r'to|-', float_pre_string)
+            float_range_list = list(map(self.safe_float, float_range_list))
+            average_of_range = round((float_range_list[0] + float_range_list[1]) / 2, 1)
+            floats_string = str(average_of_range)
+        except:
+            floats_string = ""
+        return floats_string
+
+
+    @staticmethod
+    def is_numeric_string(input_str):
+        return re.match(r'^-?\d+(\.\d+)?$', input_str) is not None
+
+
+    def safe_float(self, x):
+        if isinstance(x,float):
+            return x
+        elif isinstance(x,int):
+            return float(x)
+        elif self.is_numeric_string(x):
+            return float(x)
+        else:
+            return 1.0
+
+
     def close_sessions(self):
-        print(len(self.sessions))
         for session in self.sessions:
             session.close()
 
 
     def _extract_model_data(self, json_data):
+        if not json_data:
+            return {}
         def clean_json(json_str):
             json_str = re.sub(r'[\x00-\x1F\x7F]', '', json_str)
             return json_str
@@ -415,18 +475,26 @@ class Civit:
             extracted_data["trainedWords"] = json_data["trainedWords"]
         if 'images' in json_data and isinstance(json_data['images'], list):
             for image in json_data['images']:
-                if 'url' in image:
+                if 'url' in image and 'type' in image and image['type'] != "video":
                     extracted_data["imageUrls"].append(image['url'])
         self.version_id = str(extracted_data["versionId"])
         self.model_id = str(extracted_data["modelId"])
         self.model_name = str(extracted_data["modelName"])
-        self.trained_words =",\n".join(extracted_data["trainedWords"])
+        tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
+        if len(tidy_trained_phrases) > 2:
+            main_tags = tidy_trained_phrases.pop(0)
+            self.trained_words = f"{main_tags}, {{{'|'.join(tidy_trained_phrases)}}}"
+        elif len(tidy_trained_phrases) == 2:
+            self.trained_words = f"{{{'|'.join(tidy_trained_phrases)}}}"
+        else:
+            self.trained_words = f"{', '.join(tidy_trained_phrases)}"
         self.version_description = str(extracted_data["version_description"])
         self.image_urls = extracted_data["imageUrls"]
         return extracted_data
 
 
 #region Safetensors
+
 class Safetensors:
     def __init__(self):
         self.file_handle = None         #file handle
@@ -516,6 +584,7 @@ class Safetensors:
 
 
 #region Metadata
+
 class Metadata:
     """
     A class to store and manage metadata information for a Safetensors file.
@@ -543,15 +612,16 @@ class Metadata:
     """
 
     def __init__(self):
-        self.file_path: str = None
+        self.file_path: str = ""
         self.safetensors_file: Safetensors = None
-        self.safetensors_hash: str = None
+        self.safetensors_hash: str = ""
         self.header = None
-        self.metadata_dict: str = None
-        self.metadata_report: str = None
-        self.rec_tags: str = None
-        self.stripped_tags: str = None
-        self.pretty_metadata: str = None
+        self.metadata_dict: str = ""
+        self.metadata_report: str = ""
+        self.lora_key: str = ""
+        self.rec_tags: str = ""
+        self.stripped_tags: str = ""
+        self.pretty_metadata: str = ""
 
 
     @staticmethod
@@ -567,7 +637,7 @@ class Metadata:
         self.safetensors_hash = self.safetensors_file.get_hash()
         self.header = self.safetensors_file.get_header()
         self.metadata_report = self._get_implicit_metadata_report(self.header)
-
+        self.lora_key = self.format_lora_filepath_to_keyname()
 
     def _get_safetensors_file(self, file_path, quiet=True):
         safetensors_file = Safetensors.get_file(file_path, quiet) # omits the first non-JSON line
@@ -587,7 +657,7 @@ class Metadata:
             stripped_tags = pretty_tags.strip("{} \n")
             rec_tags = self._get_top_tags(filtered_tags, tag_count)
             metadata_report = f"{stripped_tags}\n\nMetadata:\n{pretty_metadata}"
-            self.rec_tags = rec_tags
+            self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))#.replace("(", "\\(").replace(")", "\\)")
             self.stripped_tags = stripped_tags
         else:
             metadata_report = f"No implicit tag information\n\nMetadata:\n{pretty_metadata}"
@@ -595,6 +665,27 @@ class Metadata:
         self.metadata_dict = metadata
         self.pretty_metadata = pretty_metadata
         return metadata_report
+
+
+    def format_lora_filepath_to_keyname(self):
+        lora_path = self.file_path
+        if not lora_path:
+            return ""
+        if not isinstance(lora_path,str):
+            try:
+                lora_path = str(lora_path)
+            except:
+                return ""
+        lora_path = lora_path.replace("\\","/")
+        lora_path = lora_path.strip("<>")
+        lora_sans_lora_prefix = re.sub(r"lora:","",lora_path)
+        minus_drive = os.path.splitdrive(lora_sans_lora_prefix)[-1]
+        clean_lora_path = re.sub(r":.*$","",minus_drive)
+        lora_sans_path_prefix = os.path.basename(clean_lora_path)
+        lora_sans_model_prefix = re.sub(r".*(XL_|SD15_|Flux1D_|Flux1S_)","", lora_sans_path_prefix)
+        lora_name_only = os.path.splitext(lora_sans_model_prefix)[0]
+        return lora_name_only
+
 
     def _get_top_tags(self, dictionary:dict, amount:int):
         if amount <= 0:
@@ -638,6 +729,7 @@ class Metadata:
 
 
 #region Helpers
+
 def retrieve_sha256_hash(file_path, ads_stream_name="sha256", create_alternate_data_stream=True, create_hash_file=False, force_compute=False):
     def compute_hash(file_path, create_alternate_data_stream, create_hash_file):
         try:
@@ -708,6 +800,22 @@ def retrieve_sha256_hash(file_path, ads_stream_name="sha256", create_alternate_d
     return model_hash
 
 
+def tidy_tags(tag_string):
+    if isinstance(tag_string, list):
+        tag_string = ", ".join(map(str, tag_string))
+    if not isinstance(tag_string, str) or tag_string.strip(" ,\t\r\n") == "":
+        return ""
+    normalized_tags = [t.lower() for t in map(str.strip, tag_string.split(',')) if t]
+    processed_tag_string = re.sub(r"\s+", " ", ", ".join(normalized_tags))
+    return processed_tag_string
+
+
+def ensure_double_backslashes(text):
+    text = re.sub(r'\\*\(', r'\\\\(', text)
+    text = re.sub(r'\\*\)', r'\\\\)', text)
+    return text
+
+
 def AliRecursiveJSONLoader(data: dict) -> None:
     """
     Recursively parse and pretty print nested JSON dict in place.
@@ -768,7 +876,9 @@ def AliRecursiveJSONLoader(data: dict) -> None:
 
 def main(file_path=""):
     root = tk.Tk()
+    #s = time.time()
     app = MetadataGUI(root, file_path)
+    #print("e:", time.time() - s)
     root.mainloop()
 
 
@@ -777,6 +887,7 @@ if __name__ == "__main__":
         file_path = sys.argv[1]
         main(file_path)
     else:
+        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\__LoraStaging\Pony_XL_Misekai_Style.safetensors"
         main(TEST_FILE_PATH)
 
 
