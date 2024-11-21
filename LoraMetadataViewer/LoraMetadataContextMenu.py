@@ -56,20 +56,21 @@ class SafetensorsException(Exception):
 
 
 #region MetadataGUI
+
 class MetadataGUI:
-    def __init__(self, master, file_path):
+    def __init__(self, master:tk.Tk, file_path):
         if not file_path:
             raise ValueError("No file path provided to MetadataGUI.")
-        self.master: tk.Tk = master
+        self.master = master
         self.file_path = file_path
-        self.application_path = self.get_app_path()
+        #self.application_path = self.get_app_path()
         self.metadata: Metadata = Metadata.get_metadata(file_path)
         self.civit: Civit = Civit.get_civit(self.metadata.safetensors_hash)
         try:
             self.build_main_window()
         except Exception as e:
             logger.error(e, exc_info=1)
-            self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.rec_tags}\n\n{self.metadata.pretty_metadata}")
+            self.build_fallback_window(e)
         self.master.protocol("WM_DELETE_WINDOW", self.close_window)
         self.master.attributes('-topmost', True)
         self.master.after(0, self.master.attributes, '-topmost', False)
@@ -122,19 +123,14 @@ class MetadataGUI:
                 scrollregion=canvas.bbox("all")
             )
         )
-
         scrollbar_y.grid(row=0, column=1, sticky='ns')
         scrollbar_x.grid(row=1, column=0, sticky='ew')
-
 
         text_frame = Frame(self.master,height=initial_text_height)
         text_frame.grid(row=1, column=0, sticky='nsew')
         text_frame.grid_rowconfigure(0, weight=0,minsize=1)
         text_frame.grid_columnconfigure(0, weight=1)
         text_frame.grid_propagate(False)  # Prevent the frame from resizing to fit the text widget
-
-
-
         text_widget = Text(text_frame, wrap='word')
         scrollbar_text = Scrollbar(text_frame)
         scrollbar_text.pack(side='right', fill='y')
@@ -142,48 +138,54 @@ class MetadataGUI:
         text_widget.configure(yscrollcommand=scrollbar_text.set)
         scrollbar_text.config(command=text_widget.yview)
 
-
-
         button_frame = tk.Frame(self.master,height=25)
         button_frame.grid(row=2, column=0, sticky='nsew')
-        #"versionId", "modelId","modelName","trainedWords","imageUrls"
+
         self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
         self.add_ez_copy(text_widget)
         self.add_text_block(text_widget, "Extra Floats", self.civit.extra_floats)
         self.add_text_block(text_widget, "Trained Words", self.civit.trained_words)
         self.add_text_block(text_widget, "Suggested Strength", self.civit.strength)
-        self.add_text_block(text_widget, "Top 10 Tags", self.metadata.rec_tags)
+        self.add_text_block(text_widget, "Top 20 Tags", self.metadata.rec_tags)
         self.add_text_block(text_widget, "Version Description", self.civit.version_description)
         self.add_text_block(text_widget, "Model Description", self.civit.html_text)
         #self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
         self.add_collapsible_end_block(text_widget, button_frame, "File Metadata", self.metadata.metadata_report)
         text_widget.config(state="normal")
-        #text_widget.config(state='normal')  # Make the text widget editable
-        #self.dict_entry()
 
 
-    def build_fallback_window(self, pretty_text):
+    def build_fallback_window(self, error):
         self.master.title(self.file_path)
-        default_height = 500
+        default_height = 400
         default_width = 800
         self.master.geometry(f"{default_width}x{default_height}")
         self.master.resizable(True, True)
         self.master.bind('<Escape>', self.close_window)
         self.master.bind('<Control-w>', self.close_window)
-        self.master.grid_rowconfigure(0, weight=1)
+        self.master.grid_rowconfigure(0, weight=10, minsize=1)
+        self.master.grid_rowconfigure(1, weight=0)
         self.master.grid_columnconfigure(0, weight=1)
         self.master.grid_columnconfigure(1, weight=0)
-        text_widget = tk.Text(self.master, wrap='word')
-        self.add_ez_copy(text_widget)
-        text_widget.insert(tk.END, f"{pretty_text}")
-        text_widget.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-        scrollbar = tk.Scrollbar(self.master, orient=tk.VERTICAL, command=text_widget.yview)
-        scrollbar.grid(row=0, column=1, sticky='ns')
-
-        # Disable editing
-        text_widget.config(state=tk.DISABLED)
+        text_frame = Frame(self.master, height=1)
+        text_frame.grid(row=0, column=0, sticky='nsew')
+        text_frame.grid_rowconfigure(0, weight=0,minsize=1)
+        text_frame.grid_columnconfigure(0, weight=1)
+        text_frame.grid_propagate(False)
+        text_widget = tk.Text(text_frame, wrap='word')
+        scrollbar = tk.Scrollbar(text_frame)
+        scrollbar.pack(side='right', fill='y')
+        text_widget.pack(fill='both', expand=True)
         text_widget.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=text_widget.yview)
+        button_frame = tk.Frame(self.master, height=25)
+        button_frame.grid(row=2, column=0, sticky='s')
+        self.add_text_block(text_widget, "Error", f"{error}")
+        self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
+        self.add_ez_copy(text_widget)
+        self.add_text_block(text_widget, "Top 20 Tags", self.metadata.rec_tags)
+        self.add_collapsible_end_block(text_widget, button_frame, "File Metadata", self.metadata.metadata_report)
+        text_widget.config(state="normal")
 
 
     def on_mousewheel(self, event, widget):
@@ -636,7 +638,6 @@ class Safetensors:
             raise SafetensorsException.invalid_file(self.filename, "Duplicate keys in header")
 
 
-
 #region Metadata
 
 class Metadata:
@@ -695,7 +696,7 @@ class Metadata:
         return safetensors_file
 
 
-    def _get_implicit_metadata_report(self, header: dict, tag_count=10):
+    def _get_implicit_metadata_report(self, header: dict, tag_count=20):
         metadata = header.get("__metadata__", {})
         full_sorted_tag_dict_list = self.find_tag_frequencies(metadata)
         full_sorted_tag_string = "\n\n".join(full_sorted_tag_dict_list)
@@ -975,7 +976,7 @@ if __name__ == "__main__":
         main(file_path)
     else:
         #TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Happoubi_Style.safetensors"
+        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_ZC_Taji_Style.safetensors"
         main(TEST_FILE_PATH)
 
 
