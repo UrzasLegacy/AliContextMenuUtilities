@@ -71,6 +71,8 @@ class MetadataGUI:
             logger.error(e, exc_info=1)
             self.build_fallback_window(f"Error: {e}\n\nModel Hash: {self.metadata.safetensors_hash}\n\n{self.metadata.rec_tags}\n\n{self.metadata.pretty_metadata}")
         self.master.protocol("WM_DELETE_WINDOW", self.close_window)
+        self.master.attributes('-topmost', True)
+        self.master.after(0, self.master.attributes, '-topmost', False)
 
 
     def get_app_path(self):
