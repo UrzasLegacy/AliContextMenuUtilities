@@ -123,11 +123,14 @@ class MetadataGUI:
 
         scrollbar_y.grid(row=0, column=1, sticky='ns')
         scrollbar_x.grid(row=1, column=0, sticky='ew')
+
+
         text_frame = Frame(self.master,height=initial_text_height)
         text_frame.grid(row=1, column=0, sticky='nsew')
         text_frame.grid_rowconfigure(0, weight=0,minsize=1)
         text_frame.grid_columnconfigure(0, weight=1)
         text_frame.grid_propagate(False)  # Prevent the frame from resizing to fit the text widget
+
 
 
         text_widget = Text(text_frame, wrap='word')
@@ -137,6 +140,10 @@ class MetadataGUI:
         text_widget.configure(yscrollcommand=scrollbar_text.set)
         scrollbar_text.config(command=text_widget.yview)
 
+
+
+        button_frame = tk.Frame(self.master,height=25)
+        button_frame.grid(row=2, column=0, sticky='nsew')
         #"versionId", "modelId","modelName","trainedWords","imageUrls"
         self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
@@ -147,10 +154,11 @@ class MetadataGUI:
         self.add_text_block(text_widget, "Top 10 Tags", self.metadata.rec_tags)
         self.add_text_block(text_widget, "Version Description", self.civit.version_description)
         self.add_text_block(text_widget, "Model Description", self.civit.html_text)
-        self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
-
-        text_widget.config(state='normal')  # Make the text widget editable
-        self.dict_entry()
+        #self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
+        self.add_collapsible_end_block(text_widget, button_frame, "File Metadata", self.metadata.metadata_report)
+        text_widget.config(state="normal")
+        #text_widget.config(state='normal')  # Make the text widget editable
+        #self.dict_entry()
 
 
     def build_fallback_window(self, pretty_text):
@@ -196,6 +204,50 @@ class MetadataGUI:
         tag_name = f"text_block"
         text_widget.insert(tk.END, text_body, tag_name)
         text_widget.tag_config(tag_name, lmargin1=20, lmargin2=20)
+
+
+    def add_collapsible_end_block(self, text_widget:tk.Text, button_frame, display_title, display_text):
+        text_title = f"{display_title}:"
+        text_body = f"\n{display_text}\n\n"
+        title_tag = "border_text"
+        text_widget.insert(tk.END, text_title, title_tag)
+        text_widget.tag_config(title_tag, border=10, borderwidth=1, relief="solid")
+        collapsible_start = text_widget.index("end-1c")
+        tag_name = f"collapsible_block"
+        text_widget.mark_set(f"{tag_name}_start", collapsible_start)
+        text_widget.tag_config(tag_name, lmargin1=20, lmargin2=20)
+        button = tk.Button(button_frame, text="Expand Section", command=lambda x=text_widget: self.toggle_collapsible_section(x))
+        button.pack(pady=2)
+        self.collapsible_section = {
+            "collapsible_tag": tag_name,
+            "collapsible_text": text_body + "\n",
+            "is_collapsed": True,
+            'button': button,
+        }
+
+
+    def toggle_collapsible_section(self, text_widget:tk.Text):
+            """
+            Toggle the visibility of the collapsible section.
+            :param section_index: The index of the section in the sections list.
+            """
+            section = self.collapsible_section
+            text_widget.config(state="normal")
+
+            collapsible_tag = section["collapsible_tag"]
+            start_mark = f"{collapsible_tag}_start"
+
+            if section["is_collapsed"]:
+                start_index = text_widget.index(start_mark)
+                text_widget.insert(start_index, section["collapsible_text"], collapsible_tag)
+                section["is_collapsed"] = False
+            else:
+                ranges = text_widget.tag_ranges(collapsible_tag)
+                if ranges:
+                    text_widget.delete(ranges[0], ranges[1])
+                section["is_collapsed"] = True
+            button:tk.Button = section["button"]
+            button.config(text="Collapse Section" if not section["is_collapsed"] else "Expand Section")
 
 
     def add_hyperlink(self, text_widget:tk.Text, version_id, model_id, display_text):
@@ -605,8 +657,6 @@ class Metadata:
         The text payload to be displayed in the GUI.
     rec_tags : str
         Top 10 recommended tags.
-    stripped_tags : str
-        A string representation of (tag, frequency) pairs for easier display or processing.
     pretty_metadata : str
         A formatted version of the metadata json for easier human readability.
     """
@@ -620,7 +670,6 @@ class Metadata:
         self.metadata_report: str = ""
         self.lora_key: str = ""
         self.rec_tags: str = ""
-        self.stripped_tags: str = ""
         self.pretty_metadata: str = ""
 
 
@@ -646,25 +695,55 @@ class Metadata:
 
     def _get_implicit_metadata_report(self, header: dict, tag_count=10):
         metadata = header.get("__metadata__", {})
+        full_sorted_tag_dict_list = self.find_tag_frequencies(metadata)
+        full_sorted_tag_string = "\n\n".join(full_sorted_tag_dict_list)
         AliRecursiveJSONLoader(metadata)
         pretty_metadata = json.dumps(metadata, ensure_ascii=False, separators=(', ', ': '), indent=2)
-        ss_tag_frequency: str|bytes|bytearray = metadata.get("ss_tag_frequency", {})
-        ss_tag_frequency_dict: dict = next(iter(ss_tag_frequency.values()), {})
-        filtered_tags = self._get_filtered_tags(ss_tag_frequency_dict)
+        #ss_tag_frequency: str|bytes|bytearray = metadata.get("ss_tag_frequency", {})
+        #ss_tag_frequency_dict: dict = next(iter(ss_tag_frequency.values()), {})
+        #filtered_tags = self._get_filtered_tags(ss_tag_frequency_dict)
         metadata_report = ""
-        if filtered_tags:
-            pretty_tags = json.dumps(filtered_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
-            stripped_tags = pretty_tags.strip("{} \n")
-            rec_tags = self._get_top_tags(filtered_tags, tag_count)
-            metadata_report = f"{stripped_tags}\n\nMetadata:\n{pretty_metadata}"
+        if full_sorted_tag_string:
+            rec_tags = self._get_top_tags(full_sorted_tag_dict_list, tag_count)
+            #pretty_top_tags = json.dumps(rec_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
+            #pretty_top_tags = pretty_top_tags.strip("{} \n")
+            metadata_report = f"Full Tag List:\n{full_sorted_tag_string}\n\nMetadata:\n{pretty_metadata}"
             self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))#.replace("(", "\\(").replace(")", "\\)")
-            self.stripped_tags = stripped_tags
         else:
             metadata_report = f"No implicit tag information\n\nMetadata:\n{pretty_metadata}"
         #logger.debug(f"::::{pretty_metadata}")
         self.metadata_dict = metadata
         self.pretty_metadata = pretty_metadata
         return metadata_report
+
+
+    def find_tag_frequencies(self,input_dict):
+        """
+        Recursively search for 'tag_frequency' or 'ss_tag_frequency' in a dictionary.
+        Return the first value found, sorted and stringified.
+
+        Parameters
+        input_dict: Dictionary to search.
+        """
+        out_list = []
+        def recursive_search(d):
+            for key, value in d.items():
+                if key == "tag_frequency" or key == "ss_tag_frequency":
+                    if isinstance(value, str):
+                        try:
+                            value = json.loads(value)
+                        except:
+                            continue
+                    for k, v in value.items():
+                        if len(v):
+                            sorted_v = dict(sorted(v.items(), key=lambda x: int(x[1]), reverse=True))
+                            out_list.append(json.dumps(sorted_v, indent=2))
+                if isinstance(value, dict):
+                    recursive_search(value)
+        recursive_search(input_dict)
+        if len(out_list):
+            return out_list
+        return ""  # Neither key found
 
 
     def format_lora_filepath_to_keyname(self):
@@ -687,10 +766,14 @@ class Metadata:
         return lora_name_only
 
 
-    def _get_top_tags(self, dictionary:dict, amount:int):
+    def _get_top_tags(self, full_sorted_tag_dict_list:str, amount:int):
         if amount <= 0:
-                return ""
-        keys = list(dictionary.keys())[:amount]
+            return ""
+        try:
+            dict = json.loads(full_sorted_tag_dict_list[0])
+        except:
+            return "_get_top_tags: Stringify failed."
+        keys = list(dict.keys())[:amount]
         return ",".join(keys)
 
 
@@ -703,25 +786,27 @@ class Metadata:
             return filtered_data
 
         def sort_dict_by_values(data: dict) -> dict:
-            sorted_items = sorted(data.items(), key=lambda item: item[1],reverse=True)
+            sorted_items = sorted(data.items(), key=lambda item: item[1], reverse=True)
             sorted_dict = {k: v for k, v in sorted_items}
             return sorted_dict
 
         if ss_tag_frequency_dict:
             tag_count = len(ss_tag_frequency_dict.items())
             match tag_count:
-                case tag_count if tag_count > 500:
-                    filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,99)
-                case tag_count if tag_count > 250:
-                    filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,97)
-                case tag_count if tag_count > 100:
-                    filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,95)
-                case tag_count if tag_count > 50:
-                    filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,90)
-                case tag_count if tag_count > 20:
-                    filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,50)
+                # case tag_count if tag_count > 500:
+                #     filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,99)
+                # case tag_count if tag_count > 250:
+                #     filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,97)
+                # case tag_count if tag_count > 100:
+                #     filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,95)
+                # case tag_count if tag_count > 50:
+                #     filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,90)
+                # case tag_count if tag_count > 20:
+                #     filtered_ss_tag_frequency_dict = filter_above_percentile(ss_tag_frequency_dict,50)
                 case _:
                     filtered_ss_tag_frequency_dict = ss_tag_frequency_dict
+            # sorted_ss_tag_frequency_dict = sort_dict_by_values(filtered_ss_tag_frequency_dict)
+            # AliRecursiveJSONLoader(sorted_ss_tag_frequency_dict)
             sorted_filtered_ss_tag_frequency_dict = sort_dict_by_values(filtered_ss_tag_frequency_dict)
             AliRecursiveJSONLoader(sorted_filtered_ss_tag_frequency_dict)
             return sorted_filtered_ss_tag_frequency_dict
@@ -887,7 +972,8 @@ if __name__ == "__main__":
         file_path = sys.argv[1]
         main(file_path)
     else:
-        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\__LoraStaging\Pony_XL_Misekai_Style.safetensors"
+        #TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
+        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Happoubi_Style.safetensors"
         main(TEST_FILE_PATH)
 
 
