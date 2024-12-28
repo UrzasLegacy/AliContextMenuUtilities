@@ -345,7 +345,7 @@ class MetadataGUI:
         f'{self.civit.trained_words if self.civit.trained_words else ""}' +\
         '", "WEIGHT": "' +\
         f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}' +\
-        f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.rec_tags}"}},'
+        f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
         return template
 
 
@@ -692,6 +692,7 @@ class Metadata:
         self.metadata_report: str = ""
         self.lora_key: str = ""
         self.rec_tags: str = ""
+        self.store_tags: str = ""
         self.pretty_metadata: str = ""
 
 
@@ -727,10 +728,12 @@ class Metadata:
         metadata_report = ""
         if full_sorted_tag_string:
             rec_tags = self._get_top_tags(full_sorted_tag_dict_list, tag_count)
+            store_tags = self._get_top_tags(full_sorted_tag_dict_list, 10)
             #pretty_top_tags = json.dumps(rec_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
             #pretty_top_tags = pretty_top_tags.strip("{} \n")
             metadata_report = f"Full Tag List:\n{full_sorted_tag_string}\n\nMetadata:\n{pretty_metadata}"
-            self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))#.replace("(", "\\(").replace(")", "\\)")
+self.store_tags = tidy_tags(ensure_double_backslashes(store_tags))
+            self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))
         else:
             metadata_report = f"No implicit tag information\n\nMetadata:\n{pretty_metadata}"
         #logger.debug(f"::::{pretty_metadata}")
