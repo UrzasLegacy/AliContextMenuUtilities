@@ -33,8 +33,13 @@ from queue import Queue
 API_URL_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
 MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
 MODEL_PAGE_VERSION_PREFIX = "?modelVersionId="
-access_cookie = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..2lx17VfhTNqdg30q.qy9nv_atXOiL4u7j5luNUDX4n9p6icszdhM0tPJXyI-84-RjOZNSPGvIyuyaQtz2iLhYNtZ9Pfdk9HtEXNgnwLgQmPelXctW57b_riiwXeSc4Q3W779XbheDlohi49-SdZUop7bvZTvLmnM7PxQM5phlOFI7u0R5obgmXJxBmTk_IoMLnMVGg6rKTSw6RMfxPeqHxmtvSi9IK_CHirLQgmuh_kfCR_IFy2aHYwYULbVROEwsPWm1EEiTGEFseXnzRZU4m9pah2qDrUtlXvyg18gVnJFP6M0fdfD-gFFrm8fqh6Ma36HN-hOFvgJ_hQ-IBAGqaIP-jxBBsNzpD00OBN37pcW6qWxx1wPVdsFxUeKXwEyCuCjYIXU9HIJUjNnu9_pOpxUvgK9wNJXL_qEZip33N_TwaCpRCK1tJDq-KxgWNA1SJxY4Vb1EQ2TJhgFwAo5_q8QfwUeqV1VC_GEWsG7G3zXjFxWTOg1bAHm9kKdUsVnBDoIWB02n4zK6D2GO8XfkVvs-iGwV4iWPkV8EQg6gBPgm1YHlvAnupN_AeITKxrGTJmmIvDx0RDlKxQLvNsEI58oGhqPHtQ7VMKBvnzqwdacR8f5XjCdZu1W1XM4vBdTVbFC_bjVUwNgyzbPtkxQBzZxIt2NoyYc2y_ddA312LIZ8xA26DquoC_nq9Y1B9DxbB14yPt7lT1xXtaZEi8wDpRHWkTQEt0U4tYumMc9H2vlZGIawdHZwn34gqFUzDuIGt0s_dBONk8JGRSCZZGkzjahHvZqeoxduNEpW15DMFQZKaB8Im8Lo7d85VUQN0kYt4cCHmUjGKmCkyOe7rPx6_RdPzMuC2eTibmMaH8mdhfgDWl-mSc4Sha2lP7I0vaIVIervcJPbZdGQshV5GGzhzlfMpWUL4J-PbCY_ZNi7yJv6gZgplyP5N5lNcKT1x5iXWwfW6h2NiNJUq6RAHQaYnABMLWG-8oZ1vdUXOSfFzqZhw0n8Droxc0VxNTtoJiJZKGoZYmrWsGX5DsSWOnwKwXx4XZZ_jlKJBfkrGiRIUAjbw5KIpaGmwBizQaU0rngkqa0hYYe74u018fV8rJvBhd8XjwnCLj_du4jwft2itg8_hCyCug9GrfjnwyyBU9w-a81wGKUrIaXHLHafdsOtobOZHjPFl-YXzbipDI6wFjFZkYVUyVkdmwGHDVpeAtmrb6cAywSWHyzFdiGAMMHPf9toVqY2Kxgb0HUewJb7F2VUrvqFx6T_kVFB.ntqp8RClwghIRJ8nJWkMsg"
-
+access_cookie = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..1QM6py1244wFADJk.yTmzVzjCVU2GbZWLQPH02NUayOZ6_Zefendxp-CHQOaHD8EBpMFajMSDs-WMLsUR81pfOET3CClnHr7tYDa24UUh9MDu8vyfUgg3TF6KATLb3X3RkiHganCeo2Jwh_h-pv334b1KdKr7TR0PLd3VZuMxx6-2NdUZJhhxyQgUEct_c3UnnF91wVVRLtkf2xHXpYMISfeWCaYdKOjaTBNPbKAsDUZSdt6tY435EPHiQyunuGWZSr9Fx2hsJBsn6uOPnwvmMiUZZekNS7LnMDUEKTOyRuydy8JVVYQTFQSN28mr_r9nfFQlI8kJHgsoFC4_p18M1lk-4ZHbPzTNoJ2AaURp8qbWAdT6dFQBUGkkMIzL_rhDeHDn8mlGid-OXtRGeVsEwOTzU7bUuwclAWCaWXjSbRGzQ5d6kD0lEdJhDSEJmeVcM5S_Rik1y2MFry4p9rEPc8pYI7xIn3fMj_PubWKhvW5K1G_GHaepJ0QBc8_ZDjuB3Jmf_RspyYvDUlJI9TTfKWl3_70wrIJVaa9q8jlpUtkZseoV_GunQ9iYT4xkdbBFCjyp-oCPF3-XqN3j0-vCJkPCpVUsjqf5eP7ETr60i4CmDzUKXPOLabXKXvS7TaA2b4Gi4sN7uBDmOHMYjEqdrl_LlA2HP3hPehdig5tTTToCytOsM-rgKHLff3qVRW5nTkvsHh_mGD5VOqhpYs4XJGvZA1-D7KSAUpZ7nBBpDbF4w8lHbS-Oe-eg_DdMdw0eR7cbHKCppn9wOfUBB72HeQUB1jNriqa3fTT-16uISOEdyT57ASVbdej5IQz_OwHAz4nNSFuO9pc7nmTxrR84mq33ad56otaPX1RuEqiA0xbLRmD9e_AWN7ef_zYbOi8o1OfqK-CxdH_RcxMjCjp6ECJdSn13pmzGZZ7Gzotm6gZFjblWm1oqbXyeMx1cSb03cOYEKQ9C4_Z2SwBJE3BSiRuQDAZMzocugD3Yj7M_v9AUL6EGuu9pM-a1qt6EwUQj4_cxtBKGkJb4cKqm2q8QGcTwZf3_tNB6sJ6VC0PBzf3DlANrP0-Afj4Zb6755W5xiDK9cxTj3xKBmLKC72uQrwRYh-WwkdnjqbvsnOS4QK1TKCGuZwRPYL7viNfzLtpHqxDCPGs-ijS2gWogsA4bNbVudOjGJBgN4xrk_hqDsvdxVGZipuTZqdac0LjYsiSWik1evGReU4vSkQ3_MErMtDyadEQwMjkcpNIjk0I.4Tfi4q1Ntyj46GHtuFs-Dw"
+stripe_mid = "04088e78-d4fe-4e7b-a7fd-b1efa069ec3773094b"
+cf_clearance = ".e.ifysy0K0gNnEezAzp5LDTrcQISt0yynwaOmcA41U-1715975542-1.0.1.1-19lH5Ec4X53xlZXFHcWj7wRFc6kMVxeZGarMyJwUCRn5Ic5z4hJqqc_y1e04sgNEV6mfMi9PMcsoRhhieeyRKA"
+ph_phc_MRWB5oArnYNY437MmczkYEQ6qWydDqsq1NqzpFjg8OI_posthog = "%7B%22distinct_id%22%3A%221679166%22%2C%22%24device_id%22%3A%22018e2f1c-8423-7e1c-bea8-223d1fa5de63%22%2C%22%24user_state%22%3A%22identified%22%2C%22%24user_id%22%3A%221679166%22%2C%22%24stored_person_properties%22%3A%7B%22name%22%3A%22alistormccoy%22%2C%22email%22%3A%22alistormccoy%40gmail.com%22%7D%2C%22%24sesid%22%3A%5B1710187382111%2C%22018e2f1c-8425-7605-90e2-dabbf090e9df%22%2C1710187381797%5D%2C%22%24active_feature_flags%22%3A%5B%5D%2C%22%24enabled_feature_flags%22%3A%7B%7D%2C%22%24feature_flag_payloads%22%3A%7B%7D%2C%22%24session_recording_enabled_server_side%22%3Atrue%2C%22%24console_log_recording_enabled_server_side%22%3Atrue%2C%22%24session_recording_recorder_version_server_side%22%3A%22v2%22%2C%22%24autocapture_disabled_server_side%22%3Atrue%7D"
+ref_landing_page = "%2Fimages%2F43490525"
+csrf = "c7ffbf1e0bfe16bb9d4aab9eceebb89457ca8f14b5f33493b5b8dbdeda42d330%7Cf0b36623fd1772e16652b52e964c0b77e6a943306c719dc3061ce8cdc2380dcd"
+Secure = "https%3A%2F%2Fcivitai.com"
 #TODO sort image urls so their display order is consistent
 #TODO add file path display
 #TODO add model author display
@@ -449,13 +454,21 @@ class Civit:
             return "", ""
         cookies = RequestsCookieJar()
         cookies.set("__Secure-civitai-token", access_cookie)
+        # cookies.set("stripe_mid", stripe_mid)
+        # cookies.set("cf_clearance", cf_clearance)
+        # cookies.set("ph_phc_MRWB5oArnYNY437MmczkYEQ6qWydDqsq1NqzpFjg8OI_posthog", ph_phc_MRWB5oArnYNY437MmczkYEQ6qWydDqsq1NqzpFjg8OI_posthog)
+        # cookies.set("__Host-next-auth.csrf-token", csrf)
+        # cookies.set("__Secure-next-auth.callback-url", Secure)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        }
         model_url = MODEL_PAGE_URL_PREFIX + self.model_id + MODEL_PAGE_VERSION_PREFIX + self.version_id
         session:requests.Session = self.session_pool.get()
         try:
-            response = session.get(model_url,cookies=cookies)
+            response = session.get(model_url, headers=headers, cookies=cookies)
             response.raise_for_status()  # Check if the request was successful
             html_doc = Document(response.text)
-            match = re.search(r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (0\.8)</span>', response.text)
+            match = re.search(r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>', response.text)
             strength_result = match.group(1) if match else ""
             return (self.html_to_markdown(html_doc.summary()), strength_result)
         except Exception as e:
