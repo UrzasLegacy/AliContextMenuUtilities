@@ -150,9 +150,9 @@ class MetadataGUI:
         self.add_text_block(text_widget, "Base Model", self.civit.base_model_name)
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
         self.add_ez_copy(text_widget)
-        self.add_text_block(text_widget, "Extra Floats", self.civit.extra_floats)
         self.add_text_block(text_widget, "Trained Words", self.civit.trained_words)
         self.add_text_block(text_widget, "Suggested Strength", self.civit.strength)
+        self.add_text_block(text_widget, "Extra Floats", self.civit.extra_floats)
         self.add_text_block(text_widget, "Top 20 Tags", self.metadata.rec_tags)
         self.add_text_block(text_widget, "Version Description", self.civit.version_description)
         self.add_text_block(text_widget, "Model Description", self.civit.html_text)
@@ -293,7 +293,7 @@ class MetadataGUI:
 
             pyperclip.copy(text)
             return "break"
-        tag_name = f"ez_copy"
+        tag_name = "ez_copy"
         title_tag = "border_text"
         text_widget.insert(tk.END,"Dictionary Template:",title_tag)
         text_widget.insert(tk.END,"\n")
@@ -574,7 +574,7 @@ class Civit:
         self.model_name = str(extracted_data["modelName"])
         self.base_model_name = str(extracted_data["baseModel"])
         tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
-            self.trained_words = f"{', '.join(tidy_trained_phrases)}"
+        self.trained_words = f"{', '.join(tidy_trained_phrases)}"
         self.version_description = str(extracted_data["version_description"])
         self.image_urls = extracted_data["imageUrls"]
         return extracted_data
@@ -744,7 +744,7 @@ class Metadata:
             #pretty_top_tags = json.dumps(rec_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
             #pretty_top_tags = pretty_top_tags.strip("{} \n")
             metadata_report = f"Full Tag List:\n{full_sorted_tag_string}\n\nMetadata:\n{pretty_metadata}"
-self.store_tags = tidy_tags(ensure_double_backslashes(store_tags))
+            self.store_tags = tidy_tags(ensure_double_backslashes(store_tags))
             self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))
         else:
             metadata_report = f"No implicit tag information\n\nMetadata:\n{pretty_metadata}"
@@ -1010,7 +1010,7 @@ if __name__ == "__main__":
         main(file_path)
     else:
         #TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_ZC_Taji_Style.safetensors"
+        TEST_FILE_PATH = r"C:\Users\alist\Downloads\Pony_XL_suspended on penis_pony.safetensors"
         main(TEST_FILE_PATH)
 
 
