@@ -480,8 +480,13 @@ class Civit:
 
     def _pull_floats(self):
         floats_string = ""
-        pattern = r'(?<!\()\b\d+\.\d+\b(?:\s*[-to]+\s*\d+\.\d+)?(?!\))'
-        matches = re.findall(pattern, self.html_text)
+        #removal_pattern = r'cfg.+'
+        #sani_html = re.sub(removal_pattern, "", self.html_text, 0, re.IGNORECASE)
+        targeting_pattern = r"weight.+"
+        target_matches = re.findall(targeting_pattern, self.html_text, re.IGNORECASE)
+        reconstructed_html = "\n".join(target_matches)
+        pattern = r'(?<!\()-?\d+(?:\.\d+)?(?:\s*[-to]+\s*\d+(?:\.\d+)?)?(?!\))'
+        matches = re.findall(pattern, reconstructed_html, re.IGNORECASE)
         floats_list = [" ".join(match) for match in map(str.split, matches)]
         if len(floats_list) > 1:
             floats_string = f"<{ ', '.join(floats_list)}>, "
@@ -492,21 +497,21 @@ class Civit:
 
     def safe_float_range_to_average_string(self, floats_list:list):
         float_pre_string = "".join(floats_list)
-        if len(float_pre_string) < 3:
-            return ""
         try:
-            float_range_list = re.split(r'to|-', float_pre_string)
-            float_range_list = list(map(self.safe_float, float_range_list))
-            average_of_range = round((float_range_list[0] + float_range_list[1]) / 2, 1)
-            floats_string = str(average_of_range)
-        except:
+            float_range_list = re.split(r'to|-^\d', float_pre_string)
+            float_range_list = list(map(self.safe_float, map(str.strip, float_range_list)))
+            min_of_range = min(float_range_list)#round((float_range_list[0] + float_range_list[1]) / 2, 1)
+            floats_string = str(min_of_range)
+            if not self.is_numeric_string(floats_string):
+                raise ValueError
+        except Exception as e:
             floats_string = ""
         return floats_string
 
 
     @staticmethod
     def is_numeric_string(input_str):
-        return re.match(r'^-?\d+(\.\d+)?$', input_str) is not None
+        return re.match(r'^-?\d+(\.\d+)?$', input_str.strip()) is not None
 
 
     def safe_float(self, x):
