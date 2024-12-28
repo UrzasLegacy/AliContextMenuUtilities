@@ -142,6 +142,7 @@ class MetadataGUI:
         button_frame.grid(row=2, column=0, sticky='nsew')
 
         self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
+        self.add_text_block(text_widget, "Base Model", self.civit.base_model_name)
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
         self.add_ez_copy(text_widget)
         self.add_text_block(text_widget, "Extra Floats", self.civit.extra_floats)
@@ -360,6 +361,7 @@ class Civit:
         self.html_text = None
         self.trained_words = None
         self.model_name = None
+        self.base_model_name = None
         self.version_description = None
         self.strength = None
         self.image_urls = []
@@ -525,6 +527,7 @@ class Civit:
             "modelId": None,
             "versionId": None,
             "modelName": "",
+            "baseModel": "",
             "trainedWords": [],
             "version_description": "",
             "imageUrls": []
@@ -540,6 +543,8 @@ class Civit:
             if 'name' in json_data:
                 model_name += f" - {json_data['name']}"
             extracted_data["modelName"] = model_name
+        if 'baseModel' in json_data:
+            extracted_data["baseModel"] = json_data["baseModel"]
         if 'trainedWords' in json_data:
             extracted_data["trainedWords"] = json_data["trainedWords"]
         if 'images' in json_data and isinstance(json_data['images'], list):
@@ -549,6 +554,7 @@ class Civit:
         self.version_id = str(extracted_data["versionId"])
         self.model_id = str(extracted_data["modelId"])
         self.model_name = str(extracted_data["modelName"])
+        self.base_model_name = str(extracted_data["baseModel"])
         tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
         if len(tidy_trained_phrases) > 2:
             main_tags = tidy_trained_phrases.pop(0)
