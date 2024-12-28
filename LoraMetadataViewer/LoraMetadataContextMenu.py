@@ -473,7 +473,7 @@ class Civit:
             return (self.html_to_markdown(html_doc.summary()), strength_result)
         except Exception as e:
             logger.error(f"Failed to load html from {model_url}: {e}")
-            return ""
+            return ("", "")
         finally:
             self.session_pool.put(session)
 
