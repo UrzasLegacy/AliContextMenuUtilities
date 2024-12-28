@@ -270,8 +270,21 @@ class MetadataGUI:
 
     def add_ez_copy(self, text_widget:tk.Text):
         dict_template = ensure_double_backslashes(self.dict_entry())
-        def click(event):
-            text = f"\t{dict_template}\n"
+        def click(event: tk.Event):
+
+            # Log the event state
+            logger.debug(f"Event state: {event.state}")
+
+            if event.state & 0x0004:  # Control key
+                text = pyperclip.paste()
+                logger.debug(f"Clipboard content: {text}")
+            else:
+                text = ''
+                logger.debug("Starting with empty string")
+
+            text += f"\t{dict_template}\n"
+            logger.debug(f"Final text: {text}")
+
             pyperclip.copy(text)
             return "break"
         tag_name = f"ez_copy"
