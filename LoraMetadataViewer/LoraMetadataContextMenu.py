@@ -574,12 +574,6 @@ class Civit:
         self.model_name = str(extracted_data["modelName"])
         self.base_model_name = str(extracted_data["baseModel"])
         tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
-        if len(tidy_trained_phrases) > 2:
-            main_tags = tidy_trained_phrases.pop(0)
-            self.trained_words = f"{main_tags}, {{{'|'.join(tidy_trained_phrases)}}}"
-        elif len(tidy_trained_phrases) == 2:
-            self.trained_words = f"{{{'|'.join(tidy_trained_phrases)}}}"
-        else:
             self.trained_words = f"{', '.join(tidy_trained_phrases)}"
         self.version_description = str(extracted_data["version_description"])
         self.image_urls = extracted_data["imageUrls"]
