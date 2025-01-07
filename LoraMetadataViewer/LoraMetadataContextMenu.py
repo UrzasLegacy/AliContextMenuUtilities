@@ -17,7 +17,7 @@ import tkinter as tk
 from html2text import HTML2Text
 from tkinter import Text, Scrollbar, Canvas, Frame
 from bs4 import BeautifulSoup
-from PIL import Image,ImageTk
+from PIL import Image, ImageTk
 from io import BytesIO
 from readability import Document
 from queue import Queue
@@ -25,9 +25,9 @@ from queue import Queue
 log_file_path = os.path.splitext(os.path.abspath(__file__))[0] + ".log"
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[logging.FileHandler(log_file_path)]
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[logging.FileHandler(log_file_path)],
 )
 logger = logging.getLogger(__name__)
 
@@ -43,19 +43,20 @@ ph_phc_MRWB5oArnYNY437MmczkYEQ6qWydDqsq1NqzpFjg8OI_posthog = "%7B%22distinct_id%
 ref_landing_page = "%2Fimages%2F43490525"
 csrf = "c7ffbf1e0bfe16bb9d4aab9eceebb89457ca8f14b5f33493b5b8dbdeda42d330%7Cf0b36623fd1772e16652b52e964c0b77e6a943306c719dc3061ce8cdc2380dcd"
 Secure = "https%3A%2F%2Fcivitai.com"
-#TODO sort image urls so their display order is consistent
-#TODO add file path display
-#TODO add model author display
-#TODO autoadd model to hash dictionary C:\AliProjects\StableDiffusion\AliComfy\AliNodes\AliHashes.json
-    #TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
+# TODO sort image urls so their display order is consistent
+# TODO add file path display
+# TODO add model author display
+# TODO autoadd model to hash dictionary C:\AliProjects\StableDiffusion\AliComfy\AliNodes\AliHashes.json
+# TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
+
 
 class SafetensorsException(Exception):
-    def __init__(self, msg:str):
+    def __init__(self, msg: str):
         self.msg = msg
         super().__init__(msg)
 
     @staticmethod
-    def invalid_file(filename:str, whatiswrong:str):
+    def invalid_file(filename: str, whatiswrong: str):
         message = f"{filename} is not a valid .safetensors file: {whatiswrong}"
         return SafetensorsException(msg=message)
 
@@ -63,15 +64,16 @@ class SafetensorsException(Exception):
         return self.msg
 
 
-#region MetadataGUI
+# region MetadataGUI
+
 
 class MetadataGUI:
-    def __init__(self, master:tk.Tk, file_path):
+    def __init__(self, master: tk.Tk, file_path):
         if not file_path:
             raise ValueError("No file path provided to MetadataGUI.")
         self.master = master
         self.file_path = file_path
-        #self.application_path = self.get_app_path()
+        # self.application_path = self.get_app_path()
         self.metadata: Metadata = Metadata.get_metadata(file_path)
         self.civit: Civit = Civit.get_civit(self.metadata.safetensors_hash)
         try:
@@ -80,32 +82,30 @@ class MetadataGUI:
             logger.error(e, exc_info=1)
             self.build_fallback_window(e)
         self.master.protocol("WM_DELETE_WINDOW", self.close_window)
-        self.master.attributes('-topmost', True)
-        self.master.after(0, self.master.attributes, '-topmost', False)
-
+        self.master.attributes("-topmost", True)
+        self.master.after(0, self.master.attributes, "-topmost", False)
 
     def get_app_path(self):
-        if getattr(sys, 'frozen', False):
+        if getattr(sys, "frozen", False):
             return sys._MEIPASS
         elif __file__:
             return os.path.dirname(__file__)
         return ""
 
-
-#region Framework
+    # region Framework
 
     def build_main_window(self, initial_text_height=1):
         self.master.title(self.civit.model_name)
         self.master.geometry("1600x1250")  # Set the initial window size
         self.master.resizable(False, True)
-        self.master.grid_rowconfigure(0, weight=10,minsize=500)
+        self.master.grid_rowconfigure(0, weight=10, minsize=500)
         self.master.grid_rowconfigure(1, weight=0, minsize=initial_text_height)
         self.master.grid_columnconfigure(0, weight=1)
-        self.master.bind('<Escape>', self.close_window)
-        self.master.bind('<Control-w>', self.close_window)
+        self.master.bind("<Escape>", self.close_window)
+        self.master.bind("<Control-w>", self.close_window)
 
         image_frame = Frame(self.master)
-        image_frame.grid(row=0, column=0, sticky='nsew')
+        image_frame.grid(row=0, column=0, sticky="nsew")
         image_frame.grid_rowconfigure(0, weight=1)
         image_frame.grid_columnconfigure(0, weight=1)
 
@@ -121,35 +121,32 @@ class MetadataGUI:
         label.pack()
         label.bind("<MouseWheel>", lambda e: self.on_mousewheel(e, canvas))
         label.bind("<Shift-MouseWheel>", lambda e: self.on_shift_mousewheel(e, canvas))
-        canvas.grid(row=0, column=0, sticky='nsew')
+        canvas.grid(row=0, column=0, sticky="nsew")
         canvas.bind("<MouseWheel>", lambda e: self.on_mousewheel(e, canvas))
         canvas.bind("<Shift-MouseWheel>", lambda e: self.on_shift_mousewheel(e, canvas))
 
-        scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
-            )
-        )
-        scrollbar_y.grid(row=0, column=1, sticky='ns')
-        scrollbar_x.grid(row=1, column=0, sticky='ew')
+        scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        scrollbar_y.grid(row=0, column=1, sticky="ns")
+        scrollbar_x.grid(row=1, column=0, sticky="ew")
 
-        text_frame = Frame(self.master,height=initial_text_height)
-        text_frame.grid(row=1, column=0, sticky='nsew')
-        text_frame.grid_rowconfigure(0, weight=0,minsize=1)
+        text_frame = Frame(self.master, height=initial_text_height)
+        text_frame.grid(row=1, column=0, sticky="nsew")
+        text_frame.grid_rowconfigure(0, weight=0, minsize=1)
         text_frame.grid_columnconfigure(0, weight=1)
         text_frame.grid_propagate(False)  # Prevent the frame from resizing to fit the text widget
-        text_widget = Text(text_frame, wrap='word')
+        text_widget = Text(text_frame, wrap="word")
         scrollbar_text = Scrollbar(text_frame)
-        scrollbar_text.pack(side='right', fill='y')
-        text_widget.pack(fill='both', expand=True)
+        scrollbar_text.pack(side="right", fill="y")
+        text_widget.pack(fill="both", expand=True)
         text_widget.configure(yscrollcommand=scrollbar_text.set)
         scrollbar_text.config(command=text_widget.yview)
 
-        button_frame = tk.Frame(self.master,height=25)
-        button_frame.grid(row=2, column=0, sticky='nsew')
+        button_frame = tk.Frame(self.master, height=25)
+        button_frame.grid(row=2, column=0, sticky="nsew")
 
-        self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
+        self.add_hyperlink(
+            text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n"
+        )
         self.add_text_block(text_widget, "Creator", self.civit.creator_name)
         self.add_text_block(text_widget, "Base Model", self.civit.base_model_name)
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
@@ -160,10 +157,9 @@ class MetadataGUI:
         self.add_text_block(text_widget, "Top 20 Tags", self.metadata.rec_tags)
         self.add_text_block(text_widget, "Version Description", self.civit.version_description)
         self.add_text_block(text_widget, "Model Description", self.civit.html_text)
-        #self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
+        # self.add_text_block(text_widget, "File Metadata", self.metadata.metadata_report)
         self.add_collapsible_end_block(text_widget, button_frame, "File Metadata", self.metadata.metadata_report)
         text_widget.config(state="normal")
-
 
     def build_fallback_window(self, error):
         self.master.title(self.file_path)
@@ -171,25 +167,25 @@ class MetadataGUI:
         default_width = 800
         self.master.geometry(f"{default_width}x{default_height}")
         self.master.resizable(True, True)
-        self.master.bind('<Escape>', self.close_window)
-        self.master.bind('<Control-w>', self.close_window)
+        self.master.bind("<Escape>", self.close_window)
+        self.master.bind("<Control-w>", self.close_window)
         self.master.grid_rowconfigure(0, weight=10, minsize=1)
         self.master.grid_rowconfigure(1, weight=0)
         self.master.grid_columnconfigure(0, weight=1)
         self.master.grid_columnconfigure(1, weight=0)
         text_frame = Frame(self.master, height=1)
-        text_frame.grid(row=0, column=0, sticky='nsew')
-        text_frame.grid_rowconfigure(0, weight=0,minsize=1)
+        text_frame.grid(row=0, column=0, sticky="nsew")
+        text_frame.grid_rowconfigure(0, weight=0, minsize=1)
         text_frame.grid_columnconfigure(0, weight=1)
         text_frame.grid_propagate(False)
-        text_widget = tk.Text(text_frame, wrap='word')
+        text_widget = tk.Text(text_frame, wrap="word")
         scrollbar = tk.Scrollbar(text_frame)
-        scrollbar.pack(side='right', fill='y')
-        text_widget.pack(fill='both', expand=True)
+        scrollbar.pack(side="right", fill="y")
+        text_widget.pack(fill="both", expand=True)
         text_widget.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=text_widget.yview)
         button_frame = tk.Frame(self.master, height=25)
-        button_frame.grid(row=2, column=0, sticky='s')
+        button_frame.grid(row=2, column=0, sticky="s")
         self.add_text_block(text_widget, "Error", f"{error}")
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
         self.add_ez_copy(text_widget)
@@ -197,19 +193,16 @@ class MetadataGUI:
         self.add_collapsible_end_block(text_widget, button_frame, "File Metadata", self.metadata.metadata_report)
         text_widget.config(state="normal")
 
-
     def on_mousewheel(self, event, widget):
-        widget.yview_scroll(int(-1*(event.delta/120)), "units")
+        widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def on_shift_mousewheel(self, event, widget):
-        widget.xview_scroll(int(-1*(event.delta/120)), "units")
-
+        widget.xview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def open_url(self, url):
         webbrowser.open_new(url)
 
-
-    def add_text_block(self, text_widget:tk.Text, display_title, display_text):
+    def add_text_block(self, text_widget: tk.Text, display_title, display_text):
         text_title = f"{display_title}:"
         text_body = f"\n{display_text}\n\n"
         title_tag = "border_text"
@@ -219,8 +212,7 @@ class MetadataGUI:
         text_widget.insert(tk.END, text_body, tag_name)
         text_widget.tag_config(tag_name, lmargin1=20, lmargin2=20)
 
-
-    def add_collapsible_end_block(self, text_widget:tk.Text, button_frame, display_title, display_text):
+    def add_collapsible_end_block(self, text_widget: tk.Text, button_frame, display_title, display_text):
         text_title = f"{display_title}:"
         text_body = f"\n{display_text}\n\n"
         title_tag = "border_text"
@@ -230,63 +222,65 @@ class MetadataGUI:
         tag_name = f"collapsible_block"
         text_widget.mark_set(f"{tag_name}_start", collapsible_start)
         text_widget.tag_config(tag_name, lmargin1=20, lmargin2=20)
-        button = tk.Button(button_frame, text="Expand Section", command=lambda x=text_widget: self.toggle_collapsible_section(x))
+        button = tk.Button(
+            button_frame, text="Expand Section", command=lambda x=text_widget: self.toggle_collapsible_section(x)
+        )
         button.pack(pady=2)
         self.collapsible_section = {
             "collapsible_tag": tag_name,
             "collapsible_text": text_body + "\n",
             "is_collapsed": True,
-            'button': button,
+            "button": button,
         }
 
+    def toggle_collapsible_section(self, text_widget: tk.Text):
+        """
+        Toggle the visibility of the collapsible section.
+        :param section_index: The index of the section in the sections list.
+        """
+        section = self.collapsible_section
+        text_widget.config(state="normal")
 
-    def toggle_collapsible_section(self, text_widget:tk.Text):
-            """
-            Toggle the visibility of the collapsible section.
-            :param section_index: The index of the section in the sections list.
-            """
-            section = self.collapsible_section
-            text_widget.config(state="normal")
+        collapsible_tag = section["collapsible_tag"]
+        start_mark = f"{collapsible_tag}_start"
 
-            collapsible_tag = section["collapsible_tag"]
-            start_mark = f"{collapsible_tag}_start"
+        if section["is_collapsed"]:
+            start_index = text_widget.index(start_mark)
+            text_widget.insert(start_index, section["collapsible_text"], collapsible_tag)
+            section["is_collapsed"] = False
+        else:
+            ranges = text_widget.tag_ranges(collapsible_tag)
+            if ranges:
+                text_widget.delete(ranges[0], ranges[1])
+            section["is_collapsed"] = True
+        button: tk.Button = section["button"]
+        button.config(text="Collapse Section" if not section["is_collapsed"] else "Expand Section")
 
-            if section["is_collapsed"]:
-                start_index = text_widget.index(start_mark)
-                text_widget.insert(start_index, section["collapsible_text"], collapsible_tag)
-                section["is_collapsed"] = False
-            else:
-                ranges = text_widget.tag_ranges(collapsible_tag)
-                if ranges:
-                    text_widget.delete(ranges[0], ranges[1])
-                section["is_collapsed"] = True
-            button:tk.Button = section["button"]
-            button.config(text="Collapse Section" if not section["is_collapsed"] else "Expand Section")
-
-
-    def add_hyperlink(self, text_widget:tk.Text, version_id, model_id, display_text):
+    def add_hyperlink(self, text_widget: tk.Text, version_id, model_id, display_text):
         model_url = MODEL_PAGE_URL_PREFIX + str(model_id) + MODEL_PAGE_VERSION_PREFIX + version_id
+
         def click(event):
             self.open_url(model_url)
             return "break"
+
         tag_name = f"hyperlink-{model_url}"
         text_widget.insert(tk.END, display_text, tag_name)
         text_widget.tag_config(tag_name, foreground="blue", underline=True)
         text_widget.tag_bind(tag_name, "<Enter>", lambda e: text_widget.config(cursor="hand2"))
         text_widget.tag_bind(tag_name, "<Leave>", lambda e: text_widget.config(cursor=""))
         text_widget.tag_bind(tag_name, "<Button-1>", click)
-        self.master.bind('<space>', click)
+        self.master.bind("<space>", click)
 
-
-    def add_ez_copy(self, text_widget:tk.Text):
+    def add_ez_copy(self, text_widget: tk.Text):
         dict_template = ensure_double_backslashes(self.dict_entry())
+
         def click(event: tk.Event):
             logger.debug(f"Event state: {event.state}")
             if event.state & 0x0004:  # Control key
                 text = pyperclip.paste()
                 logger.debug(f"Clipboard content: {text}")
             else:
-                text = ''
+                text = ""
                 logger.debug("Starting with empty string")
 
             text += f"\t{dict_template}\n"
@@ -294,10 +288,11 @@ class MetadataGUI:
 
             pyperclip.copy(text)
             return "break"
+
         tag_name = "ez_copy"
         title_tag = "border_text"
-        text_widget.insert(tk.END,"Dictionary Template:",title_tag)
-        text_widget.insert(tk.END,"\n")
+        text_widget.insert(tk.END, "Dictionary Template:", title_tag)
+        text_widget.insert(tk.END, "\n")
         text_widget.tag_config(title_tag, border=10, borderwidth=1, relief="solid")
 
         text_widget.insert(tk.END, dict_template, tag_name)
@@ -306,17 +301,15 @@ class MetadataGUI:
         text_widget.tag_bind(tag_name, "<Leave>", lambda e: text_widget.config(cursor=""))
         text_widget.tag_bind(tag_name, "<Button-1>", click)
         text_widget.insert(tk.END, "\n\n")
-        self.master.bind('<`>', click)
-
+        self.master.bind("<`>", click)
 
     def close_window(self, event=None):
         self.civit and self.civit.close_sessions()
         self.master.destroy()
 
+    # region GUI Logic
 
-    #region GUI Logic
-
-    def create_collage(self, images, cols=4, thumbnail_size=(400,400)):
+    def create_collage(self, images, cols=4, thumbnail_size=(400, 400)):
         if not images:
             logging.error("No images to create a collage.")
             return None
@@ -324,7 +317,7 @@ class MetadataGUI:
         thumb_width, thumb_height = thumbnail_size
         collage_width = cols * thumb_width
         collage_height = rows * thumb_height
-        collage = Image.new('RGB', (collage_width, collage_height), (255, 255, 255))
+        collage = Image.new("RGB", (collage_width, collage_height), (255, 255, 255))
         for index, image in enumerate(images):
             row = index // cols
             col = index % cols
@@ -333,7 +326,6 @@ class MetadataGUI:
             collage.paste(image, (x, y))
         return collage
 
-
     def resize_image(self, image, max_width, max_height):
         width_ratio = max_width / image.width
         height_ratio = max_height / image.height
@@ -341,27 +333,33 @@ class MetadataGUI:
         new_size = (int(image.width * min_ratio), int(image.height * min_ratio))
         return image.resize(new_size, Image.LANCZOS)
 
-
     def dict_entry(self):
-        only_1_extra_float = self.civit.extra_floats and len(self.civit.extra_floats) <= 3 and len(self.civit.extra_floats.split(',')) == 1
+        only_1_extra_float = (
+            self.civit.extra_floats
+            and len(self.civit.extra_floats) <= 3
+            and len(self.civit.extra_floats.split(",")) == 1
+        )
 
-        template = 	f'"' +\
-        f'{self.metadata.lora_key}' +\
-        '": {"POSITIVE": "' +\
-        f'{self.civit.trained_words if self.civit.trained_words else ""}' +\
-        '", "WEIGHT": "' +\
-        f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}' +\
-        f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
+        template = (
+            f'"'
+            + f"{self.metadata.lora_key}"
+            + '": {"POSITIVE": "'
+            + f'{self.civit.trained_words if self.civit.trained_words else ""}'
+            + '", "WEIGHT": "'
+            + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}'
+            + f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
+        )
         return template
 
 
+# region Web
 
-#region Web
 
 class Civit:
     NUM_SESSIONS = 2
+
     def __init__(self):
-        self.data = None #"versionID", "modelId","description", "modelName","trainedWords","imageUrls"
+        self.data = None  # "versionID", "modelId","description", "modelName","trainedWords","imageUrls"
         self.model_id = None
         self.api_json = None
         self.html_text = None
@@ -379,17 +377,17 @@ class Civit:
             self.session_pool.put(session)
             self.sessions.append(session)
 
-
     @staticmethod
     def get_civit(safetensors_hash):
         web_handler: Civit = Civit()
         web_handler._parse(safetensors_hash)
         return web_handler
 
-
     def _parse(self, safetensors_hash):
         self.api_json = self._fetch_hash_api_json(safetensors_hash)
-        self.data = self._extract_model_data(self.api_json) #"versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
+        self.data = self._extract_model_data(
+            self.api_json
+        )  # "versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future_html = executor.submit(self._fetch_model_page_html)
             future_creator_name = executor.submit(self._fetch_creator_name, self.model_id)
@@ -399,13 +397,11 @@ class Civit:
             self.images = future_images.result()
         self.extra_floats = self._pull_floats()
 
-
     def html_to_markdown(self, html_text):
         html_converter = HTML2Text()
         html_converter.ignore_links = False  # Keep links in the output
         markdown_text = html_converter.handle(html_text)
         return markdown_text.strip()
-
 
     def _fetch_images_concurrently(self, image_urls, executor):
         images = []
@@ -414,13 +410,12 @@ class Civit:
             image = future.result()
             if image:
                 images.append(image)
-                #logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
+                # logging.info(f"Successfully fetched image {i+1}/{len(image_urls)}")
             else:
                 logger.warning(f"Failed to fetch image {i+1}/{len(image_urls)}")
         return images
 
-
-    def _fetch_image(self, url, thumbnail_size=(400,400)):
+    def _fetch_image(self, url, thumbnail_size=(400, 400)):
         session = self.session_pool.get()
         try:
             response = session.get(url)
@@ -435,15 +430,14 @@ class Civit:
         finally:
             self.session_pool.put(session)
 
-
     def _fetch_hash_api_json(self, safetensors_hash):
         url = API_URL_HASH_PREFIX + str(safetensors_hash)
         session = self.session_pool.get()
         try:
             response = session.get(url)
             response.raise_for_status()  # Check if the request was successful
-            soup = BeautifulSoup(response.text, 'html.parser')
-            text = soup.get_text(separator='\n', strip=True)
+            soup = BeautifulSoup(response.text, "html.parser")
+            text = soup.get_text(separator="\n", strip=True)
             return text
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
@@ -457,8 +451,8 @@ class Civit:
         try:
             response = session.get(url)
             response.raise_for_status()  # Check if the request was successful
-            soup = BeautifulSoup(response.text, 'html.parser')
-            text = soup.get_text(separator='\n', strip=True)
+            soup = BeautifulSoup(response.text, "html.parser")
+            text = soup.get_text(separator="\n", strip=True)
             creator_name = self._extract_model_data(text, False).get("creator_name")
             return creator_name
         except Exception as e:
@@ -466,7 +460,6 @@ class Civit:
             return ""
         finally:
             self.session_pool.put(session)
-
 
     def _fetch_model_page_html(self):
         if not self.model_id or not self.version_id:
@@ -479,15 +472,17 @@ class Civit:
         # cookies.set("__Host-next-auth.csrf-token", csrf)
         # cookies.set("__Secure-next-auth.callback-url", Secure)
         headers = {
-            'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+            "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
         }
         model_url = MODEL_PAGE_URL_PREFIX + self.model_id + MODEL_PAGE_VERSION_PREFIX + self.version_id
-        session:requests.Session = self.session_pool.get()
+        session: requests.Session = self.session_pool.get()
         try:
             response = session.get(model_url, headers=headers, cookies=cookies)
             response.raise_for_status()  # Check if the request was successful
             html_doc = Document(response.text)
-            match = re.search(r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>', response.text)
+            match = re.search(
+                r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>', response.text
+            )
             strength_result = match.group(1) if match else ""
             return (self.html_to_markdown(html_doc.summary()), strength_result)
         except Exception as e:
@@ -496,15 +491,14 @@ class Civit:
         finally:
             self.session_pool.put(session)
 
-
     def _pull_floats(self):
         floats_string = ""
-        #removal_pattern = r'cfg.+'
-        #sani_html = re.sub(removal_pattern, "", self.html_text, 0, re.IGNORECASE)
+        # removal_pattern = r'cfg.+'
+        # sani_html = re.sub(removal_pattern, "", self.html_text, 0, re.IGNORECASE)
         targeting_pattern = r"weight.+"
         target_matches = re.findall(targeting_pattern, self.html_text, re.IGNORECASE)
         reconstructed_html = "\n".join(target_matches)
-        pattern = r'(?<!\()-?\d+(?:\.\d+)?(?:\s*[-to]+\s*\d+(?:\.\d+)?)?(?!\))'
+        pattern = r"(?<!\()-?\d+(?:\.\d+)?(?:\s*[-to]+\s*\d+(?:\.\d+)?)?(?!\))"
         matches = re.findall(pattern, reconstructed_html, re.IGNORECASE)
         floats_list = [" ".join(match) for match in map(str.split, matches)]
         if len(floats_list) > 1:
@@ -513,13 +507,12 @@ class Civit:
             floats_string = self.safe_float_range_to_average_string(floats_list)
         return floats_string
 
-
-    def safe_float_range_to_average_string(self, floats_list:list):
+    def safe_float_range_to_average_string(self, floats_list: list):
         float_pre_string = "".join(floats_list)
         try:
-            float_range_list = re.split(r'to|-^\d', float_pre_string)
+            float_range_list = re.split(r"to|-^\d", float_pre_string)
             float_range_list = list(map(self.safe_float, map(str.strip, float_range_list)))
-            min_of_range = min(float_range_list)#round((float_range_list[0] + float_range_list[1]) / 2, 1)
+            min_of_range = min(float_range_list)  # round((float_range_list[0] + float_range_list[1]) / 2, 1)
             floats_string = str(min_of_range)
             if not self.is_numeric_string(floats_string):
                 raise ValueError
@@ -527,34 +520,32 @@ class Civit:
             floats_string = ""
         return floats_string
 
-
     @staticmethod
     def is_numeric_string(input_str):
-        return re.match(r'^-?\d+(\.\d+)?$', input_str.strip()) is not None
-
+        return re.match(r"^-?\d+(\.\d+)?$", input_str.strip()) is not None
 
     def safe_float(self, x):
-        if isinstance(x,float):
+        if isinstance(x, float):
             return x
-        elif isinstance(x,int):
+        elif isinstance(x, int):
             return float(x)
         elif self.is_numeric_string(x):
             return float(x)
         else:
             return 1.0
 
-
     def close_sessions(self):
         for session in self.sessions:
             session.close()
 
-
     def _extract_model_data(self, json_data, hashed=True):
         if not json_data:
             return {}
+
         def clean_json(json_str):
-            json_str = re.sub(r'[\x00-\x1F\x7F]', '', json_str)
+            json_str = re.sub(r"[\x00-\x1F\x7F]", "", json_str)
             return json_str
+
         if isinstance(json_data, str):
             json_data = json.loads(clean_json(json_data))
         if hashed:
@@ -567,32 +558,32 @@ class Civit:
                 "baseModel": "",
                 "trainedWords": [],
                 "version_description": "",
-                "imageUrls": []
+                "imageUrls": [],
             }
-            if 'id' in json_data:
+            if "id" in json_data:
                 extracted_data["versionId"] = json_data["id"]
-            if 'modelId' in json_data:
+            if "modelId" in json_data:
                 extracted_data["modelId"] = json_data["modelId"]
-            if 'description' in json_data:
+            if "description" in json_data:
                 extracted_data["version_description"] = json_data["description"]
-            if 'model' in json_data:
+            if "model" in json_data:
                 model_name = json_data["model"]["name"]
-                if 'name' in json_data:
+                if "name" in json_data:
                     model_name += f" - {json_data['name']}"
                 extracted_data["modelName"] = model_name
-            if 'baseModel' in json_data:
+            if "baseModel" in json_data:
                 extracted_data["baseModel"] = json_data["baseModel"]
-            if 'trainedWords' in json_data:
+            if "trainedWords" in json_data:
                 extracted_data["trainedWords"] = json_data["trainedWords"]
-            if 'images' in json_data and isinstance(json_data['images'], list):
-                for image in json_data['images']:
-                    if 'url' in image and 'type' in image and image['type'] != "video":
-                        extracted_data["imageUrls"].append(image['url'])
+            if "images" in json_data and isinstance(json_data["images"], list):
+                for image in json_data["images"]:
+                    if "url" in image and "type" in image and image["type"] != "video":
+                        extracted_data["imageUrls"].append(image["url"])
             self.version_id = str(extracted_data["versionId"])
             self.model_id = str(extracted_data["modelId"])
             self.model_name = str(extracted_data["modelName"])
             self.base_model_name = str(extracted_data["baseModel"])
-            tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
+            tidy_trained_phrases: list = list(map(tidy_tags, extracted_data["trainedWords"]))
             self.trained_words = f"{', '.join(tidy_trained_phrases)}"
             self.version_description = str(extracted_data["version_description"])
             self.image_urls = extracted_data["imageUrls"]
@@ -601,18 +592,20 @@ class Civit:
             extracted_data = {
                 "creator_name": None,
             }
-            if 'creator' in json_data and 'username' in json_data['creator']:
+            if "creator" in json_data and "username" in json_data["creator"]:
                 extracted_data["creator_name"] = json_data["creator"]["username"]
             self.creator_name = extracted_data["creator_name"]
             return extracted_data
 
-#region Safetensors
+
+# region Safetensors
+
 
 class Safetensors:
     def __init__(self):
-        self.file_handle = None         #file handle
-        self.header_byte_buffer = None    #header byte buffer
-        self.header = None    #parsed header as a dict
+        self.file_handle = None  # file handle
+        self.header_byte_buffer = None  # header byte buffer
+        self.header = None  # parsed header as a dict
         self.sha_hash = 0
 
     def __del__(self):
@@ -624,15 +617,13 @@ class Safetensors:
     def __exit__(self, exc_type, exc_value, traceback):
         self.close_file()
 
-
     @staticmethod
-    def get_file(filename:str, quiet=False, parseHeader=True):
+    def get_file(filename: str, quiet=False, parseHeader=True):
         safetensor: Safetensors = Safetensors()
         safetensor._open(filename, quiet, parseHeader)
         return safetensor
 
-
-    def _open(self, file_name:str, quiet=False, parseHeader=True) -> int:
+    def _open(self, file_name: str, quiet=False, parseHeader=True) -> int:
         file_stats = os.stat(file_name)
         if file_stats.st_size < 8:
             raise SafetensorsException.invalid_file(file_name, "Length less than 8 bytes")
@@ -642,60 +633,62 @@ class Safetensors:
             b8 = file_handle.read(8)  # read header size
             if len(b8) != 8:
                 raise SafetensorsException.invalid_file(file_name, f"Read only {len(b8)} bytes at start of file")
-            header_length = int.from_bytes(b8, 'little', signed=False)
+            header_length = int.from_bytes(b8, "little", signed=False)
             if 8 + header_length > file_stats.st_size:
                 raise SafetensorsException.invalid_file(file_name, "Header extends past end of file")
             header_byte_buffer = file_handle.read(header_length)
             if len(header_byte_buffer) != header_length:
-                raise SafetensorsException.invalid_file(file_name, f"header size is {header_length}, but read {len(header_byte_buffer)} bytes")
+                raise SafetensorsException.invalid_file(
+                    file_name, f"header size is {header_length}, but read {len(header_byte_buffer)} bytes"
+                )
             self.filename = file_name
             self.file_stats = file_stats
             self.file_handle = file_handle
             self.header_byte_buffer = header_byte_buffer.decode("utf-8")
             self.header_length = header_length
             if not quiet:
-                logger.info(f"{self.filename}: length={self.file_stats.st_size}, header length={self.header_length}, byte buffer={self.header_byte_buffer}")
+                logger.info(
+                    f"{self.filename}: length={self.file_stats.st_size}, header length={self.header_length}, byte buffer={self.header_byte_buffer}"
+                )
             if parseHeader:
                 self._CheckDuplicateHeaderKeys()
                 self.header = json.loads(self.header_byte_buffer)
         return None
 
-
     def get_header(self):
         return self.header
-
 
     def get_hash(self):
         return self.sha_hash
 
-
     def close_file(self):
         if self.file_handle is not None:
             self.file_handle.close()
-            self.file_handle=None
-            self.filename=""
-
+            self.file_handle = None
+            self.filename = ""
 
     def _CheckDuplicateHeaderKeys(self):
         def parse_object_pairs(pairs):
-            return [k for k,_ in pairs]
+            return [k for k, _ in pairs]
+
         keys = json.loads(self.header_byte_buffer, object_pairs_hook=parse_object_pairs)
         header_duplicate_check = {}
         for k in keys:
             if k in header_duplicate_check:
-                header_duplicate_check[k] = header_duplicate_check[k]+1
+                header_duplicate_check[k] = header_duplicate_check[k] + 1
             else:
                 header_duplicate_check[k] = 1
         hasError = False
-        for k,v in header_duplicate_check.items():
+        for k, v in header_duplicate_check.items():
             if v > 1:
-                logger.error(f"key {k} used {v} times in header",file=sys.stderr)
+                logger.error(f"key {k} used {v} times in header", file=sys.stderr)
                 hasError = True
         if hasError:
             raise SafetensorsException.invalid_file(self.filename, "Duplicate keys in header")
 
 
-#region Metadata
+# region Metadata
+
 
 class Metadata:
     """
@@ -733,16 +726,14 @@ class Metadata:
         self.store_tags: str = ""
         self.pretty_metadata: str = ""
 
-
     @staticmethod
     def get_metadata(file_path):
         metadata_handler: Metadata = Metadata()
         metadata_handler._process_metadata(file_path)
         return metadata_handler
 
-
     def _process_metadata(self, file_path):
-        self.file_path= file_path
+        self.file_path = file_path
         self.safetensors_file = self._get_safetensors_file(self.file_path)
         self.safetensors_hash = self.safetensors_file.get_hash()
         self.header = self.safetensors_file.get_header()
@@ -750,37 +741,35 @@ class Metadata:
         self.lora_key = self.format_lora_filepath_to_keyname()
 
     def _get_safetensors_file(self, file_path, quiet=True):
-        safetensors_file = Safetensors.get_file(file_path, quiet) # omits the first non-JSON line
+        safetensors_file = Safetensors.get_file(file_path, quiet)  # omits the first non-JSON line
         return safetensors_file
-
 
     def _get_implicit_metadata_report(self, header: dict, tag_count=20):
         metadata = header.get("__metadata__", {})
         full_sorted_tag_dict_list = self.find_tag_frequencies(metadata)
         full_sorted_tag_string = "\n\n".join(full_sorted_tag_dict_list)
         AliRecursiveJSONLoader(metadata)
-        pretty_metadata = json.dumps(metadata, ensure_ascii=False, separators=(', ', ': '), indent=2)
-        #ss_tag_frequency: str|bytes|bytearray = metadata.get("ss_tag_frequency", {})
-        #ss_tag_frequency_dict: dict = next(iter(ss_tag_frequency.values()), {})
-        #filtered_tags = self._get_filtered_tags(ss_tag_frequency_dict)
+        pretty_metadata = json.dumps(metadata, ensure_ascii=False, separators=(", ", ": "), indent=2)
+        # ss_tag_frequency: str|bytes|bytearray = metadata.get("ss_tag_frequency", {})
+        # ss_tag_frequency_dict: dict = next(iter(ss_tag_frequency.values()), {})
+        # filtered_tags = self._get_filtered_tags(ss_tag_frequency_dict)
         metadata_report = ""
         if full_sorted_tag_string:
             rec_tags = self._get_top_tags(full_sorted_tag_dict_list, tag_count)
             store_tags = self._get_top_tags(full_sorted_tag_dict_list, 10)
-            #pretty_top_tags = json.dumps(rec_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
-            #pretty_top_tags = pretty_top_tags.strip("{} \n")
+            # pretty_top_tags = json.dumps(rec_tags, ensure_ascii=False, separators=(', ', ': '), indent=0)
+            # pretty_top_tags = pretty_top_tags.strip("{} \n")
             metadata_report = f"Full Tag List:\n{full_sorted_tag_string}\n\nMetadata:\n{pretty_metadata}"
             self.store_tags = tidy_tags(ensure_double_backslashes(store_tags))
             self.rec_tags = tidy_tags(ensure_double_backslashes(rec_tags))
         else:
             metadata_report = f"No implicit tag information\n\nMetadata:\n{pretty_metadata}"
-        #logger.debug(f"::::{pretty_metadata}")
+        # logger.debug(f"::::{pretty_metadata}")
         self.metadata_dict = metadata
         self.pretty_metadata = pretty_metadata
         return metadata_report
 
-
-    def find_tag_frequencies(self,input_dict):
+    def find_tag_frequencies(self, input_dict):
         """
         Recursively search for 'tag_frequency' or 'ss_tag_frequency' in a dictionary.
         Return the first value found, sorted and stringified.
@@ -789,6 +778,7 @@ class Metadata:
         input_dict: Dictionary to search.
         """
         out_list = []
+
         def recursive_search(d):
             for key, value in d.items():
                 if key == "tag_frequency" or key == "ss_tag_frequency":
@@ -803,33 +793,32 @@ class Metadata:
                             out_list.append(json.dumps(sorted_v, indent=2))
                 if isinstance(value, dict):
                     recursive_search(value)
+
         recursive_search(input_dict)
         if len(out_list):
             return out_list
         return ""  # Neither key found
 
-
     def format_lora_filepath_to_keyname(self):
         lora_path = self.file_path
         if not lora_path:
             return ""
-        if not isinstance(lora_path,str):
+        if not isinstance(lora_path, str):
             try:
                 lora_path = str(lora_path)
             except:
                 return ""
-        lora_path = lora_path.replace("\\","/")
+        lora_path = lora_path.replace("\\", "/")
         lora_path = lora_path.strip("<>")
-        lora_sans_lora_prefix = re.sub(r"lora:","",lora_path)
+        lora_sans_lora_prefix = re.sub(r"lora:", "", lora_path)
         minus_drive = os.path.splitdrive(lora_sans_lora_prefix)[-1]
-        clean_lora_path = re.sub(r":.*$","",minus_drive)
+        clean_lora_path = re.sub(r":.*$", "", minus_drive)
         lora_sans_path_prefix = os.path.basename(clean_lora_path)
-        lora_sans_model_prefix = re.sub(r".*(XL_|SD15_|Flux1D_|Flux1S_)","", lora_sans_path_prefix)
+        lora_sans_model_prefix = re.sub(r".*(XL_|SD15_|Flux1D_|Flux1S_)", "", lora_sans_path_prefix)
         lora_name_only = os.path.splitext(lora_sans_model_prefix)[0]
         return lora_name_only
 
-
-    def _get_top_tags(self, full_sorted_tag_dict_list:str, amount:int):
+    def _get_top_tags(self, full_sorted_tag_dict_list: str, amount: int):
         if amount <= 0:
             return ""
         try:
@@ -838,7 +827,6 @@ class Metadata:
             return "_get_top_tags: Stringify failed."
         keys = list(dict.keys())[:amount]
         return ",".join(keys)
-
 
     def _get_filtered_tags(self, ss_tag_frequency_dict: dict):
         def filter_above_percentile(ss_tag_frequency_dict, percentile: float) -> dict:
@@ -876,13 +864,16 @@ class Metadata:
         return None
 
 
-#region Helpers
+# region Helpers
 
-def retrieve_sha256_hash(file_path, ads_stream_name="sha256", create_alternate_data_stream=True, create_hash_file=False, force_compute=False):
+
+def retrieve_sha256_hash(
+    file_path, ads_stream_name="sha256", create_alternate_data_stream=True, create_hash_file=False, force_compute=False
+):
     def compute_hash(file_path, create_alternate_data_stream, create_hash_file):
         try:
             sha256_hash = hashlib.sha256()
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 for byte_block in iter(lambda: f.read(8192), b""):
                     sha256_hash.update(byte_block)
             hash = sha256_hash.hexdigest()
@@ -895,10 +886,14 @@ def retrieve_sha256_hash(file_path, ads_stream_name="sha256", create_alternate_d
             logger.error(f"Hash could not be computed: {e}")
             return None
 
-    def write_hash_ADS(file_path, stream_value, stream_name=ads_stream_name,):
+    def write_hash_ADS(
+        file_path,
+        stream_value,
+        stream_name=ads_stream_name,
+    ):
         ads_path = f"{file_path}:{stream_name}"
         try:
-            with open(ads_path, 'w') as ads:
+            with open(ads_path, "w") as ads:
                 ads.write(stream_value)
         except Exception as e:
             logger.error(f"Error setting alternate data stream on file {ads_path}: {e}")
@@ -906,7 +901,7 @@ def retrieve_sha256_hash(file_path, ads_stream_name="sha256", create_alternate_d
     def read_hash_ADS(file_path, stream_name):
         ads_path = f"{file_path}:{stream_name}"
         try:
-            with open(ads_path, 'r') as ads:
+            with open(ads_path, "r") as ads:
                 content = ads.read()
                 return content
         except FileNotFoundError:
@@ -953,14 +948,14 @@ def tidy_tags(tag_string):
         tag_string = ", ".join(map(str, tag_string))
     if not isinstance(tag_string, str) or tag_string.strip(" ,\t\r\n") == "":
         return ""
-    normalized_tags = [t.lower() for t in map(str.strip, tag_string.split(',')) if t]
+    normalized_tags = [t.lower() for t in map(str.strip, tag_string.split(",")) if t]
     processed_tag_string = re.sub(r"\s+", " ", ", ".join(normalized_tags))
     return processed_tag_string
 
 
 def ensure_double_backslashes(text):
-    text = re.sub(r'\\*\(', r'\\\\(', text)
-    text = re.sub(r'\\*\)', r'\\\\)', text)
+    text = re.sub(r"\\*\(", r"\\\\(", text)
+    text = re.sub(r"\\*\)", r"\\\\)", text)
     return text
 
 
@@ -1024,9 +1019,9 @@ def AliRecursiveJSONLoader(data: dict) -> None:
 
 def main(file_path=""):
     root = tk.Tk()
-    #s = time.time()
+    # s = time.time()
     app = MetadataGUI(root, file_path)
-    #print("e:", time.time() - s)
+    # print("e:", time.time() - s)
     root.mainloop()
 
 
@@ -1035,8 +1030,6 @@ if __name__ == "__main__":
         file_path = sys.argv[1]
         main(file_path)
     else:
-        #TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
+        # TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
         TEST_FILE_PATH = r"c:\Users\alist\Downloads\ILL_ponytail_illustrious_V1.0.safetensors"
         main(TEST_FILE_PATH)
-
-
