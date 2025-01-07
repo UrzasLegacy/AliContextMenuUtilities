@@ -1,14 +1,6 @@
 import os
 import logging
 
-log_file_path = os.path.splitext(os.path.abspath(__file__))[0] + ".log"
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S',
-    handlers=[logging.FileHandler(log_file_path)]
-)
-logger = logging.getLogger(__name__)
 import time
 import sys
 import json
@@ -30,7 +22,18 @@ from io import BytesIO
 from readability import Document
 from queue import Queue
 
-API_URL_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
+log_file_path = os.path.splitext(os.path.abspath(__file__))[0] + ".log"
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[logging.FileHandler(log_file_path)]
+)
+logger = logging.getLogger(__name__)
+
+
+API_URL_HASH_PREFIX = "https://civitai.com/api/v1/model-versions/by-hash/"
+API_URL_MODELS_PREFIX = "https://civitai.com/api/v1/models/"
 MODEL_PAGE_URL_PREFIX = "https://civitai.com/models/"
 MODEL_PAGE_VERSION_PREFIX = "?modelVersionId="
 access_cookie = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..1QM6py1244wFADJk.yTmzVzjCVU2GbZWLQPH02NUayOZ6_Zefendxp-CHQOaHD8EBpMFajMSDs-WMLsUR81pfOET3CClnHr7tYDa24UUh9MDu8vyfUgg3TF6KATLb3X3RkiHganCeo2Jwh_h-pv334b1KdKr7TR0PLd3VZuMxx6-2NdUZJhhxyQgUEct_c3UnnF91wVVRLtkf2xHXpYMISfeWCaYdKOjaTBNPbKAsDUZSdt6tY435EPHiQyunuGWZSr9Fx2hsJBsn6uOPnwvmMiUZZekNS7LnMDUEKTOyRuydy8JVVYQTFQSN28mr_r9nfFQlI8kJHgsoFC4_p18M1lk-4ZHbPzTNoJ2AaURp8qbWAdT6dFQBUGkkMIzL_rhDeHDn8mlGid-OXtRGeVsEwOTzU7bUuwclAWCaWXjSbRGzQ5d6kD0lEdJhDSEJmeVcM5S_Rik1y2MFry4p9rEPc8pYI7xIn3fMj_PubWKhvW5K1G_GHaepJ0QBc8_ZDjuB3Jmf_RspyYvDUlJI9TTfKWl3_70wrIJVaa9q8jlpUtkZseoV_GunQ9iYT4xkdbBFCjyp-oCPF3-XqN3j0-vCJkPCpVUsjqf5eP7ETr60i4CmDzUKXPOLabXKXvS7TaA2b4Gi4sN7uBDmOHMYjEqdrl_LlA2HP3hPehdig5tTTToCytOsM-rgKHLff3qVRW5nTkvsHh_mGD5VOqhpYs4XJGvZA1-D7KSAUpZ7nBBpDbF4w8lHbS-Oe-eg_DdMdw0eR7cbHKCppn9wOfUBB72HeQUB1jNriqa3fTT-16uISOEdyT57ASVbdej5IQz_OwHAz4nNSFuO9pc7nmTxrR84mq33ad56otaPX1RuEqiA0xbLRmD9e_AWN7ef_zYbOi8o1OfqK-CxdH_RcxMjCjp6ECJdSn13pmzGZZ7Gzotm6gZFjblWm1oqbXyeMx1cSb03cOYEKQ9C4_Z2SwBJE3BSiRuQDAZMzocugD3Yj7M_v9AUL6EGuu9pM-a1qt6EwUQj4_cxtBKGkJb4cKqm2q8QGcTwZf3_tNB6sJ6VC0PBzf3DlANrP0-Afj4Zb6755W5xiDK9cxTj3xKBmLKC72uQrwRYh-WwkdnjqbvsnOS4QK1TKCGuZwRPYL7viNfzLtpHqxDCPGs-ijS2gWogsA4bNbVudOjGJBgN4xrk_hqDsvdxVGZipuTZqdac0LjYsiSWik1evGReU4vSkQ3_MErMtDyadEQwMjkcpNIjk0I.4Tfi4q1Ntyj46GHtuFs-Dw"
@@ -147,6 +150,7 @@ class MetadataGUI:
         button_frame.grid(row=2, column=0, sticky='nsew')
 
         self.add_hyperlink(text_widget, self.civit.version_id, self.civit.model_id, f"Model Page: {self.civit.model_name}\n\n")
+        self.add_text_block(text_widget, "Creator", self.civit.creator_name)
         self.add_text_block(text_widget, "Base Model", self.civit.base_model_name)
         self.add_text_block(text_widget, "Model Hash", self.metadata.safetensors_hash)
         self.add_ez_copy(text_widget)
@@ -277,10 +281,7 @@ class MetadataGUI:
     def add_ez_copy(self, text_widget:tk.Text):
         dict_template = ensure_double_backslashes(self.dict_entry())
         def click(event: tk.Event):
-
-            # Log the event state
             logger.debug(f"Event state: {event.state}")
-
             if event.state & 0x0004:  # Control key
                 text = pyperclip.paste()
                 logger.debug(f"Clipboard content: {text}")
@@ -387,11 +388,13 @@ class Civit:
 
 
     def _parse(self, safetensors_hash):
-        self.api_json = self._fetch_model_api_json(safetensors_hash)
+        self.api_json = self._fetch_hash_api_json(safetensors_hash)
         self.data = self._extract_model_data(self.api_json) #"versionID", "modelId","version_description", "modelName","trainedWords","imageUrls"
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future_html = executor.submit(self._fetch_model_page_html)
+            future_creator_name = executor.submit(self._fetch_creator_name, self.model_id)
             future_images = executor.submit(self._fetch_images_concurrently, self.image_urls, executor)
+            self.creator_name = future_creator_name.result()
             self.html_text, self.strength = future_html.result()
             self.images = future_images.result()
         self.extra_floats = self._pull_floats()
@@ -433,8 +436,8 @@ class Civit:
             self.session_pool.put(session)
 
 
-    def _fetch_model_api_json(self, safetensors_hash):
-        url = API_URL_PREFIX + str(safetensors_hash)
+    def _fetch_hash_api_json(self, safetensors_hash):
+        url = API_URL_HASH_PREFIX + str(safetensors_hash)
         session = self.session_pool.get()
         try:
             response = session.get(url)
@@ -442,6 +445,22 @@ class Civit:
             soup = BeautifulSoup(response.text, 'html.parser')
             text = soup.get_text(separator='\n', strip=True)
             return text
+        except Exception as e:
+            logger.error(f"Failed to load api_json from {url}: {e}")
+            return ""
+        finally:
+            self.session_pool.put(session)
+
+    def _fetch_creator_name(self, model_id):
+        url = API_URL_MODELS_PREFIX + str(model_id)
+        session = self.session_pool.get()
+        try:
+            response = session.get(url)
+            response.raise_for_status()  # Check if the request was successful
+            soup = BeautifulSoup(response.text, 'html.parser')
+            text = soup.get_text(separator='\n', strip=True)
+            creator_name = self._extract_model_data(text, False).get("creator_name")
+            return creator_name
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
             return ""
@@ -530,55 +549,62 @@ class Civit:
             session.close()
 
 
-    def _extract_model_data(self, json_data):
+    def _extract_model_data(self, json_data, hashed=True):
         if not json_data:
             return {}
         def clean_json(json_str):
             json_str = re.sub(r'[\x00-\x1F\x7F]', '', json_str)
             return json_str
-
         if isinstance(json_data, str):
             json_data = json.loads(clean_json(json_data))
-        # AliRecursiveJSONLoader(json_data)
-        # logger.debug(json.dumps(json_data, indent=2))
-        extracted_data = {
-            "modelId": None,
-            "versionId": None,
-            "modelName": "",
-            "baseModel": "",
-            "trainedWords": [],
-            "version_description": "",
-            "imageUrls": []
-        }
-        if 'id' in json_data:
-            extracted_data["versionId"] = json_data["id"]
-        if 'modelId' in json_data:
-            extracted_data["modelId"] = json_data["modelId"]
-        if 'description' in json_data:
-            extracted_data["version_description"] = json_data["description"]
-        if 'model' in json_data:
-            model_name = json_data["model"]["name"]
-            if 'name' in json_data:
-                model_name += f" - {json_data['name']}"
-            extracted_data["modelName"] = model_name
-        if 'baseModel' in json_data:
-            extracted_data["baseModel"] = json_data["baseModel"]
-        if 'trainedWords' in json_data:
-            extracted_data["trainedWords"] = json_data["trainedWords"]
-        if 'images' in json_data and isinstance(json_data['images'], list):
-            for image in json_data['images']:
-                if 'url' in image and 'type' in image and image['type'] != "video":
-                    extracted_data["imageUrls"].append(image['url'])
-        self.version_id = str(extracted_data["versionId"])
-        self.model_id = str(extracted_data["modelId"])
-        self.model_name = str(extracted_data["modelName"])
-        self.base_model_name = str(extracted_data["baseModel"])
-        tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
-        self.trained_words = f"{', '.join(tidy_trained_phrases)}"
-        self.version_description = str(extracted_data["version_description"])
-        self.image_urls = extracted_data["imageUrls"]
-        return extracted_data
-
+        if hashed:
+            # AliRecursiveJSONLoader(json_data)
+            # logger.debug(json.dumps(json_data, indent=2))
+            extracted_data = {
+                "modelId": None,
+                "versionId": None,
+                "modelName": "",
+                "baseModel": "",
+                "trainedWords": [],
+                "version_description": "",
+                "imageUrls": []
+            }
+            if 'id' in json_data:
+                extracted_data["versionId"] = json_data["id"]
+            if 'modelId' in json_data:
+                extracted_data["modelId"] = json_data["modelId"]
+            if 'description' in json_data:
+                extracted_data["version_description"] = json_data["description"]
+            if 'model' in json_data:
+                model_name = json_data["model"]["name"]
+                if 'name' in json_data:
+                    model_name += f" - {json_data['name']}"
+                extracted_data["modelName"] = model_name
+            if 'baseModel' in json_data:
+                extracted_data["baseModel"] = json_data["baseModel"]
+            if 'trainedWords' in json_data:
+                extracted_data["trainedWords"] = json_data["trainedWords"]
+            if 'images' in json_data and isinstance(json_data['images'], list):
+                for image in json_data['images']:
+                    if 'url' in image and 'type' in image and image['type'] != "video":
+                        extracted_data["imageUrls"].append(image['url'])
+            self.version_id = str(extracted_data["versionId"])
+            self.model_id = str(extracted_data["modelId"])
+            self.model_name = str(extracted_data["modelName"])
+            self.base_model_name = str(extracted_data["baseModel"])
+            tidy_trained_phrases:list = list(map(tidy_tags, extracted_data["trainedWords"]))
+            self.trained_words = f"{', '.join(tidy_trained_phrases)}"
+            self.version_description = str(extracted_data["version_description"])
+            self.image_urls = extracted_data["imageUrls"]
+            return extracted_data
+        else:
+            extracted_data = {
+                "creator_name": None,
+            }
+            if 'creator' in json_data and 'username' in json_data['creator']:
+                extracted_data["creator_name"] = json_data["creator"]["username"]
+            self.creator_name = extracted_data["creator_name"]
+            return extracted_data
 
 #region Safetensors
 
@@ -1010,7 +1036,7 @@ if __name__ == "__main__":
         main(file_path)
     else:
         #TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"C:\Users\alist\Downloads\Pony_XL_suspended on penis_pony.safetensors"
+        TEST_FILE_PATH = r"c:\Users\alist\Downloads\ILL_ponytail_illustrious_V1.0.safetensors"
         main(TEST_FILE_PATH)
 
 
