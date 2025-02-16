@@ -1,7 +1,5 @@
 import os
 import logging
-
-import time
 import sys
 import json
 import requests
@@ -16,7 +14,8 @@ import pyperclip
 import tkinter as tk
 from html2text import HTML2Text
 from tkinter import Text, Scrollbar, Canvas, Frame
-from bs4 import BeautifulSoup
+
+# from bs4 import BeautifulSoup # Dont need for now, only loading raw JSON data
 from PIL import Image, ImageTk
 from io import BytesIO
 from readability import Document
@@ -45,7 +44,6 @@ csrf = "c7ffbf1e0bfe16bb9d4aab9eceebb89457ca8f14b5f33493b5b8dbdeda42d330%7Cf0b36
 Secure = "https%3A%2F%2Fcivitai.com"
 # TODO sort image urls so their display order is consistent
 # TODO add file path display
-# TODO add model author display
 # TODO autoadd model to hash dictionary C:\AliProjects\StableDiffusion\AliComfy\AliNodes\AliHashes.json
 # TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
 
@@ -435,10 +433,8 @@ class Civit:
         session = self.session_pool.get()
         try:
             response = session.get(url)
-            response.raise_for_status()  # Check if the request was successful
-            soup = BeautifulSoup(response.text, "html.parser")
-            text = soup.get_text(separator="\n", strip=True)
-            return text
+            response.raise_for_status()
+            return response.text
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
             return ""
@@ -451,9 +447,9 @@ class Civit:
         try:
             response = session.get(url)
             response.raise_for_status()  # Check if the request was successful
-            soup = BeautifulSoup(response.text, "html.parser")
-            text = soup.get_text(separator="\n", strip=True)
-            creator_name = self._extract_model_data(text, False).get("creator_name")
+            # soup = BeautifulSoup(response.text, "html.parser")
+            # text = soup.get_text(separator="\n", strip=True)
+            creator_name = self._extract_model_data(response.text, False).get("creator_name")
             return creator_name
         except Exception as e:
             logger.error(f"Failed to load api_json from {url}: {e}")
@@ -542,12 +538,13 @@ class Civit:
         if not json_data:
             return {}
 
-        def clean_json(json_str):
-            json_str = re.sub(r"[\x00-\x1F\x7F]", "", json_str)
-            return json_str
+        # def clean_json(json_str):
+        #     json_str = re.sub(r"[\x00-\x1F\x7F]", "", json_str)
+        #     return json_str
 
         if isinstance(json_data, str):
-            json_data = json.loads(clean_json(json_data))
+            json_data = json.loads(sanitize_json_string(json_data))
+
         if hashed:
             # AliRecursiveJSONLoader(json_data)
             # logger.debug(json.dumps(json_data, indent=2))
@@ -953,6 +950,46 @@ def tidy_tags(tag_string):
     return processed_tag_string
 
 
+def sanitize_json_string(json_str):
+    """
+    Attempts to sanitize a raw JSON string so it can be safely loaded.
+    - Removes non-printable control characters.
+    - Fixes JSON keys by stripping characters that might cause parsing issues.
+    - Returns a valid JSON string if successful, or None on failure.
+    """
+    if not isinstance(json_str, str) or not json_str.strip():
+        print("Error: Input must be a non-empty string.")
+        return None
+    # Step 1: Remove control characters (but leave standard whitespace)
+    sanitized = re.sub(r"[\x00-\x1F\x7F]", "", json_str)
+
+    # Try to load the JSON. If it works, return a cleaned version.
+    try:
+        obj = json.loads(sanitized)
+        return json.dumps(obj, indent=2)
+    except json.JSONDecodeError:
+        pass
+
+    # Step 2: Fix problematic keys.
+    # This regex finds keys enclosed in double quotes and attempts to remove illegal characters.
+    def fix_key(match):
+        key = match.group(1)
+        # Remove characters except word chars, whitespace, dash, underscore, period.
+        fixed_key = re.sub(r"[^\w\s\-_.]", "", key)
+        return f'"{fixed_key}":'
+
+    sanitized = re.sub(r'"([^"]+)"\s*:', fix_key, sanitized)
+
+    # Step 3: Attempt to load the JSON again.
+    try:
+        obj = json.loads(sanitized)
+    except json.JSONDecodeError as e:
+        print(f"Error at line {e.lineno}, column {e.colno}: {e.msg}")
+        # start = max(e.pos - 50, 0)
+        # end = e.pos + 500
+        # logger.debug("Context: %s" % sanitized[start:end])
+
+
 def ensure_double_backslashes(text):
     text = re.sub(r"\\*\(", r"\\\\(", text)
     text = re.sub(r"\\*\)", r"\\\\)", text)
@@ -1031,5 +1068,5 @@ if __name__ == "__main__":
         main(file_path)
     else:
         # TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"c:\Users\alist\Downloads\ILL_ponytail_illustrious_V1.0.safetensors"
+        TEST_FILE_PATH = r"C:\Users\alist\Downloads\ILL_Waterkuma_2_Style.safetensors"
         main(TEST_FILE_PATH)
