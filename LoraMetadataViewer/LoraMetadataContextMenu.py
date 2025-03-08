@@ -275,11 +275,11 @@ class MetadataGUI:
         def click(event: tk.Event):
             logger.debug(f"Event state: {event.state}")
             if event.state & 0x0004:  # Control key
-                text = pyperclip.paste()
-                logger.debug(f"Clipboard content: {text}")
-            else:
                 text = ""
                 logger.debug("Starting with empty string")
+            else:
+                text = pyperclip.paste()
+                logger.debug(f"Clipboard content: {text}")
 
             text += f"\t{dict_template}\n"
             logger.debug(f"Final text: {text}")
@@ -991,8 +991,8 @@ def sanitize_json_string(json_str):
 
 
 def ensure_double_backslashes(text):
-    text = re.sub(r"\\*\(", r"\\\\(", text)
-    text = re.sub(r"\\*\)", r"\\\\)", text)
+    text = re.sub(r"\\*\\\(", r"\\\\(", text)
+    text = re.sub(r"\\*\\\)", r"\\\\)", text)
     return text
 
 
