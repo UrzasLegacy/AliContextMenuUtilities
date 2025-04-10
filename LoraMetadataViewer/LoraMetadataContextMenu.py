@@ -46,7 +46,7 @@ Secure = "https%3A%2F%2Fcivitai.com"
 # TODO add file path display
 # TODO autoadd model to hash dictionary C:\AliProjects\StableDiffusion\AliComfy\AliNodes\AliHashes.json
 # TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
-
+# TODO fails to extract "ILL_0XYUNGDHXL_Style" when quick copying lora dict template
 
 class SafetensorsException(Exception):
     def __init__(self, msg: str):
@@ -345,7 +345,7 @@ class MetadataGUI:
             + f'{self.civit.trained_words if self.civit.trained_words else ""}'
             + '", "WEIGHT": "'
             + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}'
-            + f'", "NEGATIVE": "", "NULLIFIERS": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
+            + f'", "NEGATIVE": "", "NULLIFIER": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
         )
         return template
 
