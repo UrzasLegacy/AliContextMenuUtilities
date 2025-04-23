@@ -344,7 +344,7 @@ class MetadataGUI:
             + '": {"POSITIVE": "'
             + f'{self.civit.trained_words if self.civit.trained_words else ""}'
             + '", "WEIGHT": "'
-            + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}'
+            + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "None")}'
             + f'", "NEGATIVE": "", "NULLIFIER": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
         )
         return template
@@ -479,7 +479,7 @@ class Civit:
             match = re.search(
                 r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>|"settings":{"strength":(\d\.\d)', response.text
             )
-            print(f"Strength match: {match}")
+            #print(f"Strength match: {match}")
             #strength_result = match.group(1) if match and match.group(1) else (match.group(2) if match and match.group(2) else "")
             strength_result = (match.group(1) or match.group(2) or "") if match else ""
             return (self.html_to_markdown(html_doc.summary()), strength_result)
@@ -509,12 +509,17 @@ class Civit:
         float_pre_string = "".join(floats_list)
         try:
             float_range_list = re.split(r"to|-^\d", float_pre_string)
-            float_range_list = list(map(self.safe_float, map(str.strip, float_range_list)))
-            min_of_range = min(float_range_list)  # round((float_range_list[0] + float_range_list[1]) / 2, 1)
+            float_range_list = map(str.strip, float_range_list)
+            float_range_list = map(self.safe_float, float_range_list)
+            float_range_list = list(float_range_list)
+            #average_of_range = round((float_range_list[0] + float_range_list[1]) / 2, 1)
+            min_of_range = min(float_range_list)
             floats_string = str(min_of_range)
             if not self.is_numeric_string(floats_string):
                 raise ValueError
-        except Exception as e:
+        except Exception:
+            floats_string = ""
+        if floats_string == "1.0":
             floats_string = ""
         return floats_string
 
