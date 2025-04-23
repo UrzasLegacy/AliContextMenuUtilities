@@ -477,9 +477,11 @@ class Civit:
             response.raise_for_status()  # Check if the request was successful
             html_doc = Document(response.text)
             match = re.search(
-                r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>', response.text
+                r'<span class="mantine-h9iq4m mantine-Badge-inner">Strength: (\d\.\d)</span>|"settings":{"strength":(\d\.\d)', response.text
             )
-            strength_result = match.group(1) if match else ""
+            print(f"Strength match: {match}")
+            #strength_result = match.group(1) if match and match.group(1) else (match.group(2) if match and match.group(2) else "")
+            strength_result = (match.group(1) or match.group(2) or "") if match else ""
             return (self.html_to_markdown(html_doc.summary()), strength_result)
         except Exception as e:
             logger.error(f"Failed to load html from {model_url}: {e}")
@@ -1068,5 +1070,5 @@ if __name__ == "__main__":
         main(file_path)
     else:
         # TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"C:\Users\alist\Downloads\ILL_Waterkuma_2_Style.safetensors"
+        TEST_FILE_PATH = r"S:\SD_Archive\models\Lora\PONY\Attire_In\ILL_FishnetMiniskirt_Attire.safetensors"
         main(TEST_FILE_PATH)
