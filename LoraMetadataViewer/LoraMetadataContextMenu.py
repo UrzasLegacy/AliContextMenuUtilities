@@ -344,7 +344,7 @@ class MetadataGUI:
             + '": {"POSITIVE": "'
             + f'{self.civit.trained_words if self.civit.trained_words else ""}'
             + '", "WEIGHT": "'
-            + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "None")}'
+            + f'{self.civit.strength if self.civit.strength else (self.civit.extra_floats if self.civit.extra_floats and len(self.civit.extra_floats) < 4 else "1.0")}'
             + f'", "NEGATIVE": "", "NULLIFIER": "","NOTES":"{"" if only_1_extra_float else self.civit.extra_floats}{self.metadata.store_tags}"}},'
         )
         return template
