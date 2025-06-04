@@ -48,6 +48,27 @@ Secure = "https%3A%2F%2Fcivitai.com"
 # TODO utility function to add an entry: load dictionary, set model hash key to the value of [lora_name, lora_path]
 # TODO fails to extract "ILL_0XYUNGDHXL_Style" when quick copying lora dict template
 
+def super_basic_tkinter_error_window(error):
+    root = tk.Tk()
+    root.title("Error")
+    root.geometry("400x200")
+    label = tk.Label(root, text=f"Error: {error}")
+    label.pack(pady=20)
+    button = tk.Button(root, text="OK", command=root.destroy)
+    button.pack(pady=10)
+    root.mainloop()
+
+def super_basic_tkinter_error_window_in_text_box(error):
+    root = tk.Tk()
+    root.title("Error")
+    root.geometry("400x200")
+    text_widget = tk.Text(root, wrap="word")
+    text_widget.pack(expand=True, fill="both")
+    text_widget.insert(tk.END, f"Error: {error}")
+    button = tk.Button(root, text="OK", command=root.destroy)
+    button.pack(pady=10)
+    root.mainloop()
+
 class SafetensorsException(Exception):
     def __init__(self, msg: str):
         self.msg = msg
@@ -421,9 +442,12 @@ class Civit:
             image = Image.open(BytesIO(response.content))
             image.thumbnail(thumbnail_size, Image.BICUBIC)
             return image
-
         except requests.exceptions.RequestException as e:
             logger.error(f"Error fetching {url}: {e}")
+            return None
+        except Exception as e:
+            super_basic_tkinter_error_window_in_text_box(f"Uncaught Error fetching {url}: {e}")
+            logger.error(f"Uncaught Error fetching {url}: {e}")
             return None
         finally:
             self.session_pool.put(session)
