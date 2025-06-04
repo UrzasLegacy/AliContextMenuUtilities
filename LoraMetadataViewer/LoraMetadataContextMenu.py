@@ -302,11 +302,17 @@ class MetadataGUI:
                 text = pyperclip.paste()
                 logger.debug(f"Clipboard content: {text}")
 
-            text += f"\t{dict_template}\n"
-            logger.debug(f"Final text: {text}")
+            text += f"\n\t{dict_template}"
+            logger.debug(f"Text to be copied: {text}")
+            split_lines = text.splitlines()
+            logger.debug(f"Split text: {split_lines}")
+            sorted_lines = sorted(split_lines, key=lambda x: x.lower())
+            join_lines = "\n".join(sorted_lines)
+            logger.debug(f"Join text: {join_lines}")
 
-            pyperclip.copy(text)
+            pyperclip.copy(join_lines)
             return "break"
+
 
         tag_name = "ez_copy"
         title_tag = "border_text"
@@ -1099,5 +1105,5 @@ if __name__ == "__main__":
         main(file_path)
     else:
         # TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"S:\SD_Archive\models\Lora\PONY\Attire_In\ILL_FishnetMiniskirt_Attire.safetensors"
+        TEST_FILE_PATH = r"S:\SD_Archive\models\Lora\PONY\Style_In\ILL_VanillaCookies_Style.safetensors"
         main(TEST_FILE_PATH)
