@@ -1,2 +1,2 @@
 Set objShell = CreateObject("WScript.Shell")
-objShell.Run "C:\AliProjects\AliContextMenuUtilities\.venv\Scripts\pythonw.exe C:\AliProjects\AliContextMenuUtilities\LoraMetadataViewer\LoraMetadataContextMenu.py """ & WScript.Arguments(0) & """", 0, False
+objShell.Run "C:\AliContextMenuUtilities\.venv\Scripts\pythonw.exe C:\AliContextMenuUtilities\LoraMetadataViewer\LoraMetadataContextMenu.py """ & WScript.Arguments(0) & """", 0, False

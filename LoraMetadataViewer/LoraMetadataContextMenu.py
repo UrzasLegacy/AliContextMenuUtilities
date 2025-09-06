@@ -1105,5 +1105,5 @@ if __name__ == "__main__":
         main(file_path)
     else:
         # TEST_FILE_PATH = r"s:\SD_Archive\models\Lora\PONY\Style_In\Pony_XL_Orenji_3_Style.safetensors"
-        TEST_FILE_PATH = r"S:\SD_Archive\models\Lora\PONY\Style_In\ILL_VanillaCookies_Style.safetensors"
+        TEST_FILE_PATH = r"C:\Users\alist\Downloads\Nagatsukiin-Style.safetensors"
         main(TEST_FILE_PATH)
